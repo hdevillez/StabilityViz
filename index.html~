@@ -11,35 +11,12 @@
   stroke: #999;
   stroke-opacity: .6;
   
-.axis {
-  font: 10px sans-serif;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  user-select: none;
+#graphInput
+{
+    height: 100px;
+    max-height: 100px;  
 }
 
-.axis .domain {
-  fill: none;
-  stroke: #000;
-  stroke-opacity: .3;
-  stroke-width: 10px;
-  stroke-linecap: round;
-}
-
-.axis .halo {
-  fill: none;
-  stroke: #ddd;
-  stroke-width: 8px;
-  stroke-linecap: round;
-}
-
-.slider .handle {
-  fill: #fff;
-  stroke: #000;
-  stroke-opacity: .5;
-  stroke-width: 1.25px;
-  cursor: crosshair;
-}
 }
 
 </style>
@@ -55,16 +32,25 @@
 
 <script src="d3.min.js"></script>
 <script src ="math.js"></script>
-<script src ="loadJSON.js" type = "text/javascript" ></script>
+<script src ="loadJSON.js"></script>
+<script src ="readUserGraph"></script>
 
 <p>
 
   <label for="time" 
          style="display: inline-block; width: 240px; text-align: right">
-         Time = <span id="time-value">…</span>
+         Time = <span id="time-value">0</span>
   </label>
   <input type="range" min="0" max="150" id="time">
 </p>
+
+
+<p>Graph: </p>
+<label for="graphInput"></label>
+<textarea rows = "10" cols = "50" name="graph" form="usrform" id = "graphInput" style="resize: none;"> Enter the graph here (Pajek format)</textarea>
+
+
+
 <script>
 
 
@@ -104,13 +90,15 @@ d3.select("#time").on("input", function() {
   walk();
 });
 
-var NB_STEP = 10,
-    step = 1;
+var step = 1;
 
 var nbWalkerTot = 0;
 
 function walk() {
-d3.select("#time-value").text(step);
+  
+  d3.select("#time-value").text(step);
+  d3.select("#time").property("value", step);
+
 
   var Xn = math.multiply(graph.X0, math.pow(graph.P, step));
   
