@@ -1,0 +1,19 @@
+{
+  "nodes":[
+    {"id" : 0, "name":"Myriel","nbWalker":1000000},
+    {"id" : 1,"name":"Napoleon","nbWalker":0},
+    {"id" : 2,"name":"Mlle.Baptistine","nbWalker":0},
+    {"id" : 3,"name":"Mme.Magloire","nbWalker":0},
+    {"id" : 4,"name":"CountessdeLo","nbWalker":0},
+    {"id" : 5,"name":"Geborand","nbWalker":0}
+  ],
+  "links":[
+    {"source":1,"target":0,"value":100},
+    {"source":1,"target":2,"value":100},
+    {"source":2,"target":0,"value":100},
+    {"source":3,"target":0,"value":1},
+    {"source":3,"target":4,"value":1},
+    {"source":3,"target":5,"value":1},
+    {"source":4,"target":5,"value":1}
+  ]
+}

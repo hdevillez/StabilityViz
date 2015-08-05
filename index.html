@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+.node {
+  stroke: #fff;
+  stroke-width: 1.5px;
+}
+
+.link {
+  stroke: #999;
+  stroke-opacity: .6;
+  
+.axis {
+  font: 10px sans-serif;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+
+.axis .domain {
+  fill: none;
+  stroke: #000;
+  stroke-opacity: .3;
+  stroke-width: 10px;
+  stroke-linecap: round;
+}
+
+.axis .halo {
+  fill: none;
+  stroke: #ddd;
+  stroke-width: 8px;
+  stroke-linecap: round;
+}
+
+.slider .handle {
+  fill: #fff;
+  stroke: #000;
+  stroke-opacity: .5;
+  stroke-width: 1.25px;
+  cursor: crosshair;
+}
+}
+
+</style>
+<body>
+
+<button onclick="getElementById('walk').innerHTML=walk()">Walk</button>
+<button onclick="getElementById('reinitialization').innerHTML=reinitialization()">Reinitialization</button>
+
+<p id="reinitialization"></p>
+<p id="walk"> </p>
+
+
+
+<script src="d3.min.js"></script>
+<script src ="math.js"></script>
+<script src ="loadJSON.js" type = "text/javascript" ></script>
+
+<p>
+
+  <label for="time" 
+         style="display: inline-block; width: 240px; text-align: right">
+         Time = <span id="time-value">…</span>
+  </label>
+  <input type="range" min="0" max="150" id="time">
+</p>
+<script>
+
+
+function clone(obj) {
+    if(obj === null || typeof(obj) !== 'object' || 'isActiveClone' in obj)
+        return obj;
+
+    var temp = obj.constructor(); // changed
+
+    for(var key in obj) {
+        if(Object.prototype.hasOwnProperty.call(obj, key)) {
+            obj['isActiveClone'] = null;
+            temp[key] = clone(obj[key]);
+            delete obj['isActiveClone'];
+        }
+    }    
+
+    return temp;
+}
+
+function copy(obj1, obj2) {
+    if(obj === null || typeof(obj) !== 'object' || 'isActiveClone' in obj)
+        return;
+
+    for(var key in obj) {
+        if(Object.prototype.hasOwnProperty.call(obj2, key)) {
+
+            obj1[key] = obj2[key];
+
+        }
+    }    
+}
+
+d3.select("#time").on("input", function() {
+  
+  step = +this.value;
+  walk();
+});
+
+var NB_STEP = 10,
+    step = 1;
+
+var nbWalkerTot = 0;
+
+function walk() {
+d3.select("#time-value").text(step);
+d3.select("#time").property("value", step);
+
+
+  var Xn = math.multiply(graph.X0, math.pow(graph.P, step));
+  
+  for(var i = 0; i < graph.nodes.length; i++) {
+    graph.nodes[i].nbWalker = Xn.subset(math.index(i));
+    
+
+  }
+  
+  step++;
+  update();
+  
+}
+
+function update() {
+
+  if(node != null) {
+
+    node
+      .transition()
+      .attr("opacity", function(d) { return (d.nbWalker/nbWalkerTot)*0.9+0.1 })  
+    
+    node
+      .attr("title", function(d) { return d.nbWalker});
+      
+   
+    console.log("opacity and label refreshed");
+  }
+
+}
+
+function reinitialization() {
+  
+  step = 1;
+ 
+  
+  for(var i = 0; i < graph.nodes.length; i++) {
+    graph.nodes[i].nbWalker = graph.X0[i];
+    
+
+  }
+  
+  
+  update();  
+}
+
+</script>
+
