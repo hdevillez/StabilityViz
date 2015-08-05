@@ -1,0 +1,6 @@
+function loadGraph(){
+
+  console.log(document.getElementById("graphInput").value);
+
+
+};

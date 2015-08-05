@@ -45,10 +45,17 @@
 </p>
 
 
-<p>Graph: </p>
-<label for="graphInput"></label>
-<textarea rows = "10" cols = "50" name="graph" form="usrform" id = "graphInput" style="resize: none;"> Enter the graph here (Pajek format)</textarea>
+<p>Select Graph: </p>
+<select name="graphs">
+<option value="example1">example1</option>
+<option value="example2">example2</option>
+<option value="example3">example3</option>
+<option value="example4">example4</option>
+</select>
 
+<button onclick="getElementById('loadGraph').innerHTML=loadGraph()">Load</button>
+
+<p id="loadGraph"></p>
 
 
 <script>

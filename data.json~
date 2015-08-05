@@ -1,6 +1,6 @@
 {
   "nodes":[
-    {"id" : 0,"nbWalker":1000000},
+    {"id" : 0,"nbWalker":100},
     {"id" : 1,"nbWalker":0},
     {"id" : 2,"nbWalker":0},
     {"id" : 3,"nbWalker":0},

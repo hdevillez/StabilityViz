@@ -33,7 +33,7 @@
 <script src="d3.min.js"></script>
 <script src ="math.js"></script>
 <script src ="loadJSON.js"></script>
-<script src ="readUserGraph"></script>
+<script src ="readUserGraph.js"></script>
 
 <p>
 
@@ -47,8 +47,11 @@
 
 <p>Graph: </p>
 <label for="graphInput"></label>
-<textarea rows = "10" cols = "50" name="graph" form="usrform" id = "graphInput" style="resize: none;"> Enter the graph here (Pajek format)</textarea>
+<textarea rows = "10" cols = "50" name="graph" form="usrform" id = "graphInput" style="resize: none;" placeholder = "Enter the graph here (Pajek format)"> </textarea>
 
+<button onclick="getElementById('loadGraph').innerHTML=loadGraph()">Load</button>
+
+<p id="loadGraph"></p>
 
 
 <script>
