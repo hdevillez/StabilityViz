@@ -10,30 +10,49 @@
 .link {
   stroke: #999;
   stroke-opacity: .6;
-  
-#graphInput
-{
-    height: 100px;
-    max-height: 100px;  
+   
 }
 
+rect.selection {
+  fill: transparent;
+  stroke-dasharray: 3px;
+  stroke: black;
+  stroke-width: 2px;
+}
+ 
+ 
+.selected {
+   stroke: blue;
+   stroke-width: 5;
+   stroke-dasharray: 3;
+}
+
+#completeGraph {
+
+  float:left;
 }
 
 </style>
+
+
 <body>
 
 <button onclick="getElementById('walk').innerHTML=walk()">Walk</button>
 <button onclick="getElementById('reinitialization').innerHTML=reinitialization()">Reinitialization</button>
+<button onclick="getElementById('partition').innerHTML = partition()">Partition</button>
 
 <p id="reinitialization"></p>
 <p id="walk"> </p>
+<p  id = "partition" ></p>
 
-
+<div id = "completeGraph"></div>
+<div id = "partitionGraph"></div>
 
 <script src="d3.min.js"></script>
 <script src ="math.js"></script>
 <script src ="loadJSON.js"></script>
 <script src ="readUserGraph.js"></script>
+<script src ="graph.js"></script>
 
 <p>
 
@@ -45,9 +64,16 @@
 </p>
 
 
-<p>Graph: </p>
-<label for="graphInput"></label>
-<textarea rows = "10" cols = "50" name="graph" form="usrform" id = "graphInput" style="resize: none;" placeholder = "Enter the graph here (Pajek format)"> </textarea>
+<p>Select Graph: </p>
+
+
+
+<select name="graphsChoice" id="graphChoice">
+<option value="example1.json">example1</option>
+<option value="example2.json">example2</option>
+<option value="example3">example3</option>
+<option value="example4">example4</option>
+</select>
 
 <button onclick="getElementById('loadGraph').innerHTML=loadGraph()">Load</button>
 
@@ -55,7 +81,8 @@
 
 
 <script>
-
+var nbWalkerTot = 100;
+var groupNode = []; //Array containing the nodes selected
 
 function clone(obj) {
     if(obj === null || typeof(obj) !== 'object' || 'isActiveClone' in obj)
@@ -87,6 +114,8 @@ function copy(obj1, obj2) {
     }    
 }
 
+d3.select("#time").property("value", 0);
+
 d3.select("#time").on("input", function() {
   
   step = +this.value;
@@ -95,7 +124,7 @@ d3.select("#time").on("input", function() {
 
 var step = 1;
 
-var nbWalkerTot = 0;
+
 
 function walk() {
   
@@ -147,6 +176,83 @@ function reinitialization() {
   
   update();  
 }
+
+//Let the user select nodes to do the partition shown in the right corner of the page
+function partition(){
+        svg
+                .on( "mousedown", function() {
+                        var m = d3.mouse( this);
+                        //the selection is a rectangle with rounded corners but we can try with ellipse, cx, cy, rx, ry
+                        svg.append( "rect")
+                        .attr({
+                                rx      : 70,
+                                ry      : 70,
+                                class   : "selection",
+                                x       : m[0],
+                                y       : m[1],
+                                width   : 0,
+                                height  : 0
+                        })
+                })
+                .on( "mousemove", function() {
+                        var s = svg.select( "rect.selection");
+ 
+                        if( !s.empty()) {
+                                var m = d3.mouse( this),
+ 
+                                        d = {
+                                                x       : parseInt( s.attr( "x"), 10),
+                                                y       : parseInt( s.attr( "y"), 10),
+                                                width   : parseInt( s.attr( "width"), 10),
+                                                height  : parseInt( s.attr( "height"), 10)
+                                        },
+                                        move = {
+                                                x : m[0] - d.x,
+                                                y : m[1] - d.y
+                                        };
+ 
+                                if( move.x < 1 || (move.x*2<d.width)) {
+                                        d.x = m[0];
+                                        d.width -= move.x;
+                                } else {
+                                        d.width = move.x;      
+                                }
+ 
+                                if( move.y < 1 || (move.y*2<d.height)) {
+                                        d.y = m[1];
+                                        d.height -= move.y;
+                                } else {
+                                        d.height = move.y;      
+                                }
+                           
+                                s.attr( d);
+                               
+                                d3.selectAll('.node').each(function(element){
+                                        if(!d3.select(this).classed("selected")&&
+                                                element.x>=d.x && element.x<=d.x+d.width &&
+                                                element.y>=d.y && element.y<=d.y+d.height){
+                                                        //the circles we went over get the dashed border                             
+                                                        d3.select(this).classed("selected",true); 
+                                                        var isInGroupNode = false;
+                                                        if(groupNode !== null){
+                                                                for(var i = 0; i < groupNode.length && !isInGroupNode; i++){
+                                                                        if(element.id===groupNode[i].id){
+                                                                                isInGroupNode = true;
+                                                                        }
+                                                                }
+                                                        }
+                                                        if(!isInGroupNode){
+                                                                groupNode.push(element);
+                                                        }                              
+                                        }
+                                });
+                        }
+                })
+                .on("mouseup", function(){
+                //svg.select(".selection") is an array containing the dashed rectangle
+                        svg.select( ".selection").remove();
+                });
+          }
 
 </script>
 
