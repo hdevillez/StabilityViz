@@ -1,13 +1,15 @@
-function initGraph(data) {
+function initGraph(svg) {
   
   var graph = {
     nodes : [],
-    links : []
+    links : [],
+    vis : svg
   };
 
-  graph.addNode = function (id, nbWalker) {
+  graph.addNode = function (id, nbWalker, color) {
       graph.nodes.push({"id":id});
       findNode(id).nbWalker = nbWalker;
+      findNode(id).nbWalker = color;
       refreshGraph(graph);
   };
 
@@ -65,18 +67,37 @@ function initGraph(data) {
       }
   };
   
-  for(var i = 0; i < data.nodes.length; i++) {
-    graph.addNode(data.nodes[i].id, data.nodes[i].nbWalker);
+  graph.loadGraph = function(data) {
+
+    for(var i = 0; i < data.nodes.length; i++) {
+      graph.addNode(data.nodes[i].id, 0, 0);
+    }
+    
+    for(var i = 0; i < data.links.length; i++) {
+      graph.addLink(data.links[i].source, data.links[i].target, data.links[i].value);
+    }
+    
+     initMatrices(graph);
   }
   
-  for(var i = 0; i < data.links.length; i++) {
-    graph.addLink(data.links[i].source, data.links[i].target, data.links[i].value);
+  graph.copyGraph = function(graphToCopy) {
+    for(var i = 0; i < graphToCopy.nodes.length; i++) {
+      graph.addNode(graphToCopy.nodes[i].id, graphToCopy.nodes[i].nbWalker, graphToCopy.nodes[i].color);
+    }
+    
+    for(var i = 0; i < graphToCopy.links.length; i++) {
+      graph.addLink(graphToCopy.links[i].source.id, graphToCopy.links[i].target.id, graphToCopy.links[i].value);
+    }
+  
+    initMatrices(graph);
   }
   
-  initMatrices(graph);
-  
+ 
+ 
+
   return graph;
 }
+
 
       
 function initMatrices(graph) {
@@ -140,12 +161,13 @@ function initMatrices(graph) {
 
 }    
 
+
 function refreshGraph(graph) {
  
-  node = svg2.selectAll("circle").data(graph.nodes, function(d) { 
+  node = graph.vis.selectAll("circle").data(graph.nodes, function(d) { 
             return d.id;
             });
-  link = svg2.selectAll(".link").data(graph.links, function(d) {
+  link = graph.vis.selectAll(".link").data(graph.links, function(d) {
             return d.source.id + "-" + d.target.id; 
             });
  
@@ -163,8 +185,8 @@ function refreshGraph(graph) {
       var o = null;
       return (d.nbWalker/nbWalkerTot)*0.9+0.1 })
       .style("fill", "black")			
-      .call(force.drag)
-      .on("click", mouseClick);
+      .on("click", mouseClick)
+      .call(force.drag);
     
   nodeEnter.append("title")
     .text( function(d){return d.nbWalker;}) ;
@@ -180,15 +202,15 @@ function refreshGraph(graph) {
   link.exit()
     .remove();
     
-    force.on("tick", function() {
-      link.attr("x1", function(d) { return d.source.x; })
-        .attr("y1", function(d) { return d.source.y; })
-        .attr("x2", function(d) { return d.target.x; })
-        .attr("y2", function(d) { return d.target.y; });
+  force.on("tick", function() {
+    link.attr("x1", function(d) { return d.source.x; })
+      .attr("y1", function(d) { return d.source.y; })
+      .attr("x2", function(d) { return d.target.x; })
+      .attr("y2", function(d) { return d.target.y; });
 
-      node.attr("cx", function(d) { return d.x; })
-        .attr("cy", function(d) { return d.y; });
-    });
+    node.attr("cx", function(d) { return d.x; })
+      .attr("cy", function(d) { return d.y; });
+  });
     
     
     //The node clicked gets the 100 walkers at time = 0

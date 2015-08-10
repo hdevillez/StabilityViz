@@ -23,12 +23,13 @@ var dataIsLoaded = false;
 var initialNodeisClicked = false;
 
 
-d3.json("example2.json", function(error, data) {
+d3.json("data/example2.json", function(error, data) {
   if (error) throw error;
 
 
 
-  graph = initGraph(data);
+  graph = initGraph(svg);
+  graph.loadGraph(data);
   
 
   force
@@ -47,12 +48,14 @@ function loadD3(file) {
     
     dataIsLoaded =false;
     d3.json(file, function(error, data) {
+      
       if (error) return alert("error");     
 
       graph.removeAllNodes();
       graph.removeAllLinks();
       
-      graph =initGraph(data);
+      graph = new initGraph(svg);
+      graph.loadGraph(data);
       
       force
         .nodes(graph.nodes)
