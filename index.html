@@ -37,21 +37,20 @@ rect.selection {
 
 <body>
 
-<button onclick="walk()">Walk</button>
-<button onclick="reinitialization()">Reinitialization</button>
+
 <button onclick="partition()" value = "off" id = "partitionButton">Partition</button>
 
 <p>Select Graph: </p>
 
 
-<select name="graphsChoice" id="graphChoice" oninput="loadGraph()">
+<select name="graphsChoice" id="graphChoice" onchange="loadGraph()" selectedIndex = "1">
 <option value="data/example1.json">example1</option>
 <option value="data/example2.json">example2</option>
 <option value="data/example3.json">example3</option>
 <option value="data/example4.json">example4</option>
 </select>
 
-<button onclick="loadGraph()">Load</button>
+
 
 <p id="loadGraph"></p>
 
@@ -78,6 +77,8 @@ rect.selection {
   </label>
   <input type="range" min="0" max="150" id="time">
 </p>
+<button onclick="walk()">Walk</button>
+<button onclick="reinitialization()">Reinitialization</button>
 
 
 
@@ -85,6 +86,7 @@ rect.selection {
 <script>
 var nbWalkerTot = 100;
 var groupNode = []; //Array containing the nodes selected
+var color = d3.scale.category20(); //Array of random color.
 
 function clone(obj) {
     // Handle the 3 simple types, and null or undefined
@@ -121,7 +123,7 @@ function clone(obj) {
 
 
 d3.select("#time").property("value", 0);
-
+d3.select("#graphChoice").property("selectedIndex", 0);
 d3.select("#time").on("input", function() {
   
   step = +this.value;
@@ -129,7 +131,10 @@ d3.select("#time").on("input", function() {
 });
 
 
-var step = 1;
+var step = 0;
+var initialNodeisClicked = false;
+
+loadGraph("data/example1.json");
 
 
 
@@ -158,8 +163,8 @@ function update() {
 
     node
       .transition()
-      .attr("opacity", function(d) { return (d.nbWalker/nbWalkerTot)*0.9+0.1 })  
-      .attr("r", function(d) {return (d.nbWalker/nbWalkerTot)* 50+ 10})
+      .attr("r", function(d) {return (d.nbWalker/nbWalkerTot)* 60 + 5})
+      .style("fill", function(d) {return (d.color)})
     node
       .attr("title", function(d) { return d.nbWalker});
       

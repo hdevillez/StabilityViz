@@ -1,8 +1,10 @@
+var graphPartition = null;
+
 //Let the user select nodes to do the partition shown in the right corner of the page
 function partition(){
   
   if(document.getElementById("partitionButton").value === "off") {
-    groupNode = [];
+
     document.getElementById("partitionButton").value = "on";
     document.getElementById("partitionButton").innerHTML="Partition On";
 
@@ -10,6 +12,11 @@ function partition(){
     svg
       .on( "mousedown", function() {
         var m = d3.mouse( this);
+        
+        groupNode = [];
+        node.classed("selected", false);
+        
+        
         //the selection is a rectangle with rounded corners but we can try with ellipse, cx, cy, rx, ry
         svg.append( "rect")
           .attr("rx", 70)
@@ -111,7 +118,7 @@ function partition(){
 
 function showPartition() {
  
-  var graphPartition = new initGraph(svg2);
+  graphPartition = new initGraph(svg2);
   graphPartition.copyGraph(graph);
   
   var groupNode2 = [];
@@ -120,19 +127,17 @@ function showPartition() {
     var flag = true;
     for(var j = 0; j< groupNode.length; j++) {
       
-      if(graphPartition.nodes[i].id == groupNode[j].id)
-        flag = false;  
+      if(graphPartition.nodes[i].id === groupNode[j].id)
+        groupNode[j] = graphPartition.nodes[i];
       
     }
-    if(flag)
-      groupNode2.push(graphPartition.nodes[i]);
   }
   
   
   //All the link between the two partitions are removed
   var linksToRemove = [],
       linksToAdd = [];
-  for(var iLink = 0; iLink < graphPartition.links.length; iLink++){
+ /* for(var iLink = 0; iLink < graphPartition.links.length; iLink++){
     var flag = false;
     for(var iSource = 0; iSource < groupNode.length; iSource++) {
       for(var iTarget = 0; iTarget < groupNode.length; iTarget++) {
@@ -166,16 +171,18 @@ function showPartition() {
                             "target" : graphPartition.links[iLink].target.id
                           });
       }
-  }   
+  }   */
   
-  for(var i = 0; i<  linksToRemove.length; i++) {
-    graphPartition.removeLink(linksToRemove[i].source, linksToRemove[i].target);
+  
+  for(var iNode = 0; iNode < graphPartition.nodes.length; iNode++) {
+        
+        graphPartition.nodes[iNode].color = "red";
+        console.log(graphPartition.nodes[iNode]);
   }
   
-  for(var i = 0; i<  linksToAdd.length; i++) {
-    graphPartition.addLink(linksToRemove[i].source, linksToRemove[i].target, 1);
+  for(var iNode = 0; iNode < groupNode.length; iNode++) {
+        groupNode[iNode].color = "blue";
   }
-
 
   initMatrices(graphPartition);
   
@@ -183,7 +190,10 @@ function showPartition() {
     .nodes(graphPartition.nodes)
     .links(graphPartition.links)
     .start();
+    
   refreshGraph(graphPartition);
+  
+  groupNode = [];
 
 }
 

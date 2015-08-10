@@ -8,14 +8,14 @@ function initGraph(svg) {
 
   graph.addNode = function (id, nbWalker, color) {
       graph.nodes.push({"id":id});
-      findNode(id).nbWalker = nbWalker;
-      findNode(id).nbWalker = color;
+      graph.findNode(id).nbWalker = nbWalker;
+      graph.findNode(id).color = color;
       refreshGraph(graph);
   };
 
   graph.removeNode = function (id) {
       var i = 0;
-      var n = findNode(id);
+      var n = graph.findNode(id);
       while (i < graph.links.length) {
           if ((graph.links[i]['source'] == n)||(graph.links[i]['target'] == n))
           {
@@ -23,7 +23,7 @@ function initGraph(svg) {
           }
           else i++;
       }
-      graph.nodes.splice(findNodeIndex(id),1);
+      graph.nodes.splice(graph.findNodeIndex(id),1);
       refreshGraph(graph);
   };
 
@@ -50,16 +50,16 @@ function initGraph(svg) {
   };
 
   graph.addLink = function (source, target, value) {
-      graph.links.push({"source":findNode(source),"target":findNode(target),"value":value});
+      graph.links.push({"source":graph.findNode(source),"target":graph.findNode(target),"value":value});
       refreshGraph(graph);
   };
 
-  var findNode = function(id) {
+  graph.findNode = function(id) {
       for (var i in graph.nodes) {
           if (graph.nodes[i]["id"] === id) return graph.nodes[i];};
   };
 
-  var findNodeIndex = function(id) {
+  graph.findNodeIndex = function(id) {
       for (var i=0;i<graph.nodes.length;i++) {
           if (graph.nodes[i].id==id){
               return i;
@@ -180,16 +180,18 @@ function refreshGraph(graph) {
   nodeEnter
     .append("svg:circle")
       .attr("class", "node")
-      .attr("r", 30)
-      .attr("opacity", function(d) { 
-      var o = null;
-      return (d.nbWalker/nbWalkerTot)*0.9+0.1 })
-      .style("fill", "black")			
+      .attr("r", 15)
+      //.style("fill-opacity", function(d) { return (d.nbWalker/nbWalkerTot)*0.9+0.1 })		
+      .style("fill", function(d) { return (d.color)})	
       .on("click", mouseClick)
       .call(force.drag);
     
   nodeEnter.append("title")
     .text( function(d){return d.nbWalker;}) ;
+    
+  node
+      .transition()
+      .style("fill", function(d) {return (d.color)})
     
   node.exit()
      .remove()

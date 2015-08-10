@@ -19,29 +19,7 @@ var svg2 = d3.select("#partitionGraph").append("svg")
     .attr("width", width)
     .attr("height", height);
 
-var dataIsLoaded = false;
-var initialNodeisClicked = false;
-
-
-d3.json("data/example2.json", function(error, data) {
-  if (error) throw error;
-
-
-
-  graph = initGraph(svg);
-  graph.loadGraph(data);
-  
-
-  force
-    .nodes(graph.nodes)
-    .links(graph.links)
-    .start();
-    
-  refreshGraph(graph);
-  
-    dataIsLoaded = true;
-});
-
+var dataIsLoaded = true;
 
 function loadD3(file) {
   if(dataIsLoaded){
@@ -50,9 +28,11 @@ function loadD3(file) {
     d3.json(file, function(error, data) {
       
       if (error) return alert("error");     
-
-      graph.removeAllNodes();
-      graph.removeAllLinks();
+      
+      if(graph != null) {
+        graph.removeAllNodes();
+        graph.removeAllLinks();
+      }
       
       graph = new initGraph(svg);
       graph.loadGraph(data);
