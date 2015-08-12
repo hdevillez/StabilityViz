@@ -5,11 +5,17 @@ function initGraph(svg) {
     links : [],
     vis : svg
   };
+  
+  
 
-  graph.addNode = function (id, nbWalker, color) {
+  graph.addNode = function (id) {
       graph.nodes.push({"id":id});
-      graph.findNode(id).nbWalker = nbWalker;
-      graph.findNode(id).color = color;
+      graph.findNode(id).nbWalker = 0;  
+      graph.findNode(id).color = "black";
+      graph.findNode(id).nbWalkers = [];
+      for(var i = 0; i < nbColor; i++) {
+        graph.findNode(id).nbWalkers[i] = 0;
+      }
       refreshGraph(graph);
   };
 
@@ -70,7 +76,7 @@ function initGraph(svg) {
   graph.loadGraph = function(data) {
 
     for(var i = 0; i < data.nodes.length; i++) {
-      graph.addNode(data.nodes[i].id, 0, 0);
+      graph.addNode(data.nodes[i].id);
     }
     
     for(var i = 0; i < data.links.length; i++) {
@@ -92,7 +98,9 @@ function initGraph(svg) {
     initMatrices(graph);
   }
   
- 
+  graph.changeWalker = function (walkers){};
+  
+  
  
 
   return graph;
@@ -106,7 +114,12 @@ function initMatrices(graph) {
   // Compute the adjency matrix
   graph.adjMat = function() {
 
-    var A = math.zeros(graph.nodes.length, graph.nodes.length);
+    var A = math.zeros(graph.nodes.length);
+
+
+    //reset the matrix
+    
+    //for(var i =0; i < graph.nodes.length; i++) { A.set(i, i, 0)};
 
     for(var i = 0; i < graph.links.length; i++) {
       
@@ -115,8 +128,8 @@ function initMatrices(graph) {
       A.subset(math.index(l.source.id, l.target.id), l.value);
       A.subset(math.index(l.target.id, l.source.id), l.value);
 
-
     }
+    
     
     return A;
   }
@@ -152,11 +165,44 @@ function initMatrices(graph) {
   }
     
   graph.P = graph.transitionMat();
-    
+  
+  var numericP = numeric.identity(graph.nodes.length);
+  for(var i = 0; i < graph.nodes.length; i++) {
+    for(var j = 0; j < graph.nodes.length; j++) {
+      numericP[i][j] = graph.P.subset(math.index(i, j));
+      
+    }
+  }
+  console.log(graph.P.toString());
+  console.log(numericP);
+  
+  //Compute the spectral gap
+  var lambda = numeric.eig(numericP).lambda.x;
+  var secondMaxLambda = 0;
+  var epsilon = math.pow(10, -10);
+  
+  for(var i = 0; i < graph.nodes.length; i++) {
+  
+    if(lambda[i] < 1-epsilon)
+      secondMaxLambda = Math.max(secondMaxLambda, lambda[i]); 
+      
+     console.log(lambda[i]);
+  }
+  console.log(secondMaxLambda);
+
+  //var maxTime = math.log(epsilon)/math.log(secondMaxLambda);
+  graph.maxTime = 10/(1-secondMaxLambda);
+  console.log(graph.maxTime);
+  d3.select("#time").property("max", graph.maxTime);
+  
+
   graph.X0 = [];
     
-  for(var i = 0; i < graph.nodes.length;i++) {
-    graph.X0[i] = graph.nodes[i].nbWalker;
+  for(var i = 0; i < nbColor; i++) {
+    graph.X0[i] = [];
+    for(var j = 0; j < graph.nodes.length; j++) {
+      graph.X0[i][j] = 0;
+    }
   }
 
 }    
@@ -181,8 +227,14 @@ function refreshGraph(graph) {
     .append("svg:circle")
       .attr("class", "node")
       .attr("r", 15)
+      .style("fill", function(d) { 
+        var rybColor = [];
+        for(var i = 0; i < nbColor; i++) {
+          rybColor[i] = 255/100 * d.nbWalkers[i]; //
+        }
+        return "#" +(rybColorMixer.rybToRgb(rybColor, { hex: true}));
+      })	
       //.style("fill-opacity", function(d) { return (d.nbWalker/nbWalkerTot)*0.9+0.1 })		
-      .style("fill", function(d) { return (d.color)})	
       .on("click", mouseClick)
       .call(force.drag);
     
@@ -191,7 +243,15 @@ function refreshGraph(graph) {
     
   node
       .transition()
-      .style("fill", function(d) {return (d.color)})
+      .style("fill", function(d) { 
+        var rybColor = [];
+        for(var i = 0; i < nbColor; i++) {
+          rybColor[i] = 255/100 * d.nbWalkers[i]; //
+        }
+        return "#" +(rybColorMixer.rybToRgb(rybColor, { hex: true}));
+      })	
+      .style("stroke", "#000000")
+      .style("stroke-width", "3");
     
   node.exit()
      .remove()
@@ -215,24 +275,42 @@ function refreshGraph(graph) {
   });
     
     
-    //The node clicked gets the 100 walkers at time = 0
-    function mouseClick(element){
-      if(!initialNodeisClicked){
+  //The node clicked gets the 100 walkers at time = 0
+  function mouseClick(element){
+    if(!initialNodeisClicked){
+                
+                
+      switch(currColor) {
+        case "#ff0000" :
+           element.nbWalkers[0] = 100;
+           graph.X0[0][element.id] = element.nbWalkers[0];
+           break;
+        case "#00ff00":
+          element.nbWalkers[1] = 100;
+          graph.X0[1][element.id] = element.nbWalkers[1];
+          break;
+        case "#0000ff" :
+          element.nbWalkers[2] = 100;
+          graph.X0[2][element.id] = element.nbWalkers[2];
+          break;
+        default : break;
+      }
       
-        element.nbWalker = 100;
-        graph.X0[element.id] = element.nbWalker;
-        update();
-        initialNodeisClicked=true;     
+      element.color = currColor;        
+      //update();
+      //initialNodeisClicked=true;     
                                 
-                                
-        //Reset the slider and the time
 
-        d3.select("#time").property("value", 0);
-        step = 0;
-        d3.select("#time-value").text(step);
+      //refreshGraph(graph); 
+      update();                   
+      //Reset the slider and the time
+    
+      d3.select("#time").property("value", 0);
+      step = 0;
+      d3.select("#time-value").text(step);
 
-        }              
-    }
+    }              
+  }
 
   
-}
+}     

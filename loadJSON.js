@@ -1,24 +1,3 @@
-
-var circles = null;
-var lines = null;
-var graph = null;
-
-var width = 600,
-    height = 500;
-
-var force = d3.layout.force()
-    .charge(-1000)
-    .linkDistance(75)
-    .size([width, height]);
-
-var svg = d3.select("#completeGraph").append("svg")
-    .attr("width", width)
-    .attr("height", height);
-    
-var svg2 = d3.select("#partitionGraph").append("svg")
-    .attr("width", width)
-    .attr("height", height);
-
 var dataIsLoaded = true;
 
 function loadD3(file) {
@@ -51,6 +30,13 @@ function loadD3(file) {
 
 }
 
+function loadGraph(){
 
 
+  file = document.getElementById("graphChoice").value;
+  console.log(document.getElementById("graphChoice").value);
+
+  initialNodeisClicked = false;
+  loadD3(file);
+};
 

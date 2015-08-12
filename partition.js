@@ -99,7 +99,7 @@ function partition(){
       .on("mouseup", function(){
         //svg.select(".selection") is an array containing the dashed rectangle
         console.log("test");
-          showPartition()
+          initPartition()
           svg.select( ".selection").remove();
           return;
       });
@@ -116,82 +116,25 @@ function partition(){
   }
 }
 
-function showPartition() {
- 
-  graphPartition = new initGraph(svg2);
-  graphPartition.copyGraph(graph);
+function initPartition() {
   
-  var groupNode2 = [];
-  
-  for(var i = 0; i < graphPartition.nodes.length; i++) {
-    var flag = true;
-    for(var j = 0; j< groupNode.length; j++) {
-      
-      if(graphPartition.nodes[i].id === groupNode[j].id)
-        groupNode[j] = graphPartition.nodes[i];
-      
-    }
-  }
-  
-  
-  //All the link between the two partitions are removed
-  var linksToRemove = [],
-      linksToAdd = [];
- /* for(var iLink = 0; iLink < graphPartition.links.length; iLink++){
-    var flag = false;
-    for(var iSource = 0; iSource < groupNode.length; iSource++) {
-      for(var iTarget = 0; iTarget < groupNode.length; iTarget++) {
+  /*for(var iNode = 0; iNode < graph.nodes.length; iNode++) {
         
-        if(groupNode[iSource].id == graphPartition.links[iLink].source.id
-        && groupNode[iTarget].id == graphPartition.links[iLink].target.id) {
-          flag = true;
-        }
-      }
-    }  
-    if(!flag){
-        linksToRemove.push({"source" : graphPartition.links[iLink].source.id,
-                            "target" : graphPartition.links[iLink].target.id
-                          });
-      }
-  }   
-  
-  for(var iLink = 0; iLink < graphPartition.links.length; iLink++){
-    var flag = false;
-    for(var iSource = 0; iSource < groupNode2.length; iSource++) {
-      for(var iTarget = 0; iTarget < groupNode2.length; iTarget++) {
-        
-        if(groupNode2[iSource].id == graphPartition.links[iLink].source.id
-        && groupNode2[iTarget].id == graphPartition.links[iLink].target.id) {
-          flag = true;
-        }
-      }
-    }  
-    if(flag){
-        linksToAdd.push({"source" : graphPartition.links[iLink].source.id,
-                            "target" : graphPartition.links[iLink].target.id
-                          });
-      }
-  }   */
-  
-  
-  for(var iNode = 0; iNode < graphPartition.nodes.length; iNode++) {
-        
-        graphPartition.nodes[iNode].color = "red";
-        console.log(graphPartition.nodes[iNode]);
-  }
+        graph.nodes[iNode].color = "red";
+        console.log(graph.nodes[iNode]);
+  }*/
   
   for(var iNode = 0; iNode < groupNode.length; iNode++) {
-        groupNode[iNode].color = "blue";
+        groupNode[iNode].color = currColor;
   }
 
-  initMatrices(graphPartition);
   
   force
-    .nodes(graphPartition.nodes)
-    .links(graphPartition.links)
+    .nodes(graph.nodes)
+    .links(graph.links)
     .start();
     
-  refreshGraph(graphPartition);
+  refreshGraph(graph);
   
   groupNode = [];
 
