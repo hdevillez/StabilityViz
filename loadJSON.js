@@ -32,6 +32,10 @@ function loadD3(file) {
 
 function loadGraph(){
 
+  d3.select("#time").property("value", 0);
+  time = 0;
+  d3.select("#time-value").text(time);
+
   d3.select("#automaticWalkButton").classed("active", false);
 
   if(automaticWalkInterval != null) //Remove automatic walk

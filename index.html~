@@ -102,7 +102,7 @@ rect.selection {
 <option value="data/example5.json">example5</option>
 </select>
 <button onclick="partition()" value = "off" id = "partitionButton">Partition</button>
-<button onclick="walk()">Walk</button>
+<button onclick="walk(time+1)">Walk</button>
 <button onclick="automaticWalk()" id = "automaticWalkButton" >Automatic Walk</button>
 <button onclick="reinitialization()">Reinitialization</button>
 <button onclick="showEmptyBarChart()">Show Bar Chart</button>
@@ -223,19 +223,17 @@ svg.append("rect")
       .style("stroke-width", "0");
     d3.select(this).style("stroke", "#000000");
     d3.select(this).style("stroke-width", "3");
-  });
+});
 
 
 d3.select("#time").property("value", 0);
 d3.select("#graphChoice").property("selectedIndex", 0);
 d3.select("#time").on("input", function() {
-  
-  step = +this.value;
-  walk();
+  walk(+this.value);
 });
 
 
-var step = 0;
+var time = 0;
 var initialNodeisClicked = false;
 
 loadGraph("data/example1.json");
@@ -259,15 +257,17 @@ function sumLineArray2D(tab2D, line){
         return sum;
 }
 
-function walk() {
+function walk(newTime) {
   
-  d3.select("#time-value").text(step);
-  d3.select("#time").property("value", step);
+  time = newTime;
+  
+  d3.select("#time-value").text(time);
+  d3.select("#time").property("value", time);
 
 
   var Xn = [];
   for( var i = 0; i < nbColor; i++) {
-    Xn[i] = math.multiply(graph.X0[i], math.pow(graph.P, step));
+    Xn[i] = math.multiply(graph.X0[i], math.pow(graph.P, time));
   }
   
   for(var i = 0; i < nbColor; i++) {
@@ -277,7 +277,6 @@ function walk() {
 
   }
   
-  step++;
   update();
   
 }
@@ -291,7 +290,7 @@ function automaticWalk() {
   }
   else {
     d3.select("#automaticWalkButton").classed("active", true);
-    automaticWalkInterval = setInterval(function () {walk();}, 500);
+    automaticWalkInterval = setInterval(function () {walk(/*math.round(time + graph.maxTime/60)*/1);}, 500);
   }
 }
 
@@ -315,16 +314,18 @@ function update() {
 function reinitialization() {
   
   d3.select("#automaticWalkButton").classed("active", false);
-    clearBarChart();
-  if(automaticWalkInterval != null)
+
+  if(automaticWalkInterval != null) //Remove automatic walk
     clearInterval(automaticWalkInterval);
-    
-  step = 1;
+  
+  
+  clearBarChart();   
+  time = 1;
  
   for(var i = 0; i < nbColor; i++) {
     for(var j = 0; j < graph.nodes.length; j++) {
 
-        graph.nodes[i].nbWalkers[j] = 0;
+        graph.nodes[j].nbWalkers[i] = 0;
         graph.X0[i][j] = 0;
     }
   }
@@ -334,6 +335,10 @@ function reinitialization() {
       .attr("r", 15)
       .attr("title", function(d) { return d.nbWalkers[0] +"/"+d.nbWalkers[1] +"/"+d.nbWalkers[2] })
       .style("fill", "#ffffff")
+      
+  d3.select("#time").property("value", 0);
+  time = 0;
+  d3.select("#time-value").text(time);
 
 }
 

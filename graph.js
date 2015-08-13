@@ -160,7 +160,7 @@ function initMatrices(graph) {
   }
     
   graph.P = graph.transitionMat();
-  
+  console.log(graph.P.toString());
   var numericP = numeric.identity(graph.nodes.length);
   for(var i = 0; i < graph.nodes.length; i++) {
     for(var j = 0; j < graph.nodes.length; j++) {
@@ -293,9 +293,7 @@ function refreshGraph(graph) {
       //  update();                   
       //Reset the slider and the time
     
-      d3.select("#time").property("value", 0);
-      step = 0;
-      d3.select("#time-value").text(step);
+
 
     }              
   }
