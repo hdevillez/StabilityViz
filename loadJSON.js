@@ -32,11 +32,18 @@ function loadD3(file) {
 
 function loadGraph(){
 
+  d3.select("#automaticWalkButton").classed("active", false);
 
+  if(automaticWalkInterval != null) //Remove automatic walk
+    clearInterval(automaticWalkInterval);
+  
+  
   file = document.getElementById("graphChoice").value;
   console.log(document.getElementById("graphChoice").value);
 
   initialNodeisClicked = false;
+  clearBarChart();
   loadD3(file);
+  
 };
 

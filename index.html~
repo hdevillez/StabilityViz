@@ -27,6 +27,57 @@ rect.selection {
    stroke-dasharray: 3;
 }
 
+.active {
+  border:3px solid grey; 
+  background-color: grey;
+  color: white; 
+}
+
+
+.btn {
+	-moz-box-shadow:inset 0px 0px 14px -3px #f2fadc;
+	-webkit-box-shadow:inset 0px 0px 14px -3px #f2fadc;
+	box-shadow:inset 0px 0px 14px -3px #f2fadc;
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #dbe6c4), color-stop(1, #9ba892));
+	background:-moz-linear-gradient(top, #dbe6c4 5%, #9ba892 100%);
+	background:-webkit-linear-gradient(top, #dbe6c4 5%, #9ba892 100%);
+	background:-o-linear-gradient(top, #dbe6c4 5%, #9ba892 100%);
+	background:-ms-linear-gradient(top, #dbe6c4 5%, #9ba892 100%);
+	background:linear-gradient(to bottom, #dbe6c4 5%, #9ba892 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#dbe6c4', endColorstr='#9ba892',GradientType=0);
+	background-color:#dbe6c4;
+	-moz-border-radius:6px;
+	-webkit-border-radius:6px;
+	border-radius:6px;
+	border:1px solid #b2b8ad;
+	display:inline-block;
+	cursor:pointer;
+	color:#757d6f;
+	font-family:Arial;
+	font-size: 12px;
+	font-weight:bold;
+	padding: 3px 24px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #ced9bf;
+}
+.btn:hover {
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #9ba892), color-stop(1, #dbe6c4));
+	background:-moz-linear-gradient(top, #9ba892 5%, #dbe6c4 100%);
+	background:-webkit-linear-gradient(top, #9ba892 5%, #dbe6c4 100%);
+	background:-o-linear-gradient(top, #9ba892 5%, #dbe6c4 100%);
+	background:-ms-linear-gradient(top, #9ba892 5%, #dbe6c4 100%);
+	background:linear-gradient(to bottom, #9ba892 5%, #dbe6c4 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#9ba892', endColorstr='#dbe6c4',GradientType=0);
+	background-color:#9ba892;
+}
+.btn:active {
+	position:relative;
+	top:1px;
+}
+
+
+
+
 #completeGraph {
 
   float:left;
@@ -48,21 +99,20 @@ rect.selection {
 <option value="data/example2.json">example2</option>
 <option value="data/example3.json">example3</option>
 <option value="data/example4.json">example4</option>
+<option value="data/example5.json">example5</option>
 </select>
 <button onclick="partition()" value = "off" id = "partitionButton">Partition</button>
-
+<button onclick="walk()">Walk</button>
+<button onclick="automaticWalk()" id = "automaticWalkButton" >Automatic Walk</button>
+<button onclick="reinitialization()">Reinitialization</button>
+<button onclick="showEmptyBarChart()">Show Bar Chart</button>
 
 <p id="loadGraph"></p>
 
 
-<p id="reinitialization"></p>
-<p id="walk"> </p>
-<p  id = "partition" ></p>
 
 <div id = "completeGraph"></div>
-
-
-
+<div id = "partitionGraph"></div>
 
 <p>
 
@@ -72,8 +122,6 @@ rect.selection {
   </label>
   <input type="range" min="0" max="150" id="time">
 </p>
-<button onclick="walk()">Walk</button>
-<button onclick="reinitialization()">Reinitialization</button>
 
 
 <script src="lib/d3.min.js"></script>
@@ -84,7 +132,8 @@ rect.selection {
 <script src ="loadJSON.js"></script>
 <script src ="readUserGraph.js"></script>
 <script src ="graph.js"></script>
-<script src = "partition.js"></script>
+<script src ="partition.js"></script>
+<script src ="barChart.js"></script>
 
 
 
@@ -92,7 +141,7 @@ rect.selection {
 
 var NB_MAX_COLOR = 10;
 var nbColor = 3;
-var nbWalkerTot = nbColor*100;
+var nbWalkerTot = 0;
 var groupNode = []; //Array containing the nodes selected
 var color = d3.scale.category20(); //Array of random color
 
@@ -157,6 +206,7 @@ svg.append("rect")
     
 
   });
+  
 svg.append("rect")
   .attr("class", "colorChoice")
   .attr("width", 50)
@@ -190,7 +240,24 @@ var initialNodeisClicked = false;
 
 loadGraph("data/example1.json");
 
+function getMaxOfArray(numArray) {
+  return Math.max.apply(null, numArray);
+}
 
+function sumArray(numArray) {
+  var sum = 0;
+  for(var i = 0; i <numArray.length; i++)
+    sum += numArray[i];
+  return sum;
+}
+
+function sumLineArray2D(tab2D, line){
+        var sum = 0;
+        for(var i = 0; i < nbColor; i++){
+                sum += tab2D[i][line];
+        }
+        return sum;
+}
 
 function walk() {
   
@@ -215,39 +282,75 @@ function walk() {
   
 }
 
+var automaticWalkInterval = null;  
+function automaticWalk() {
+  
+  if(d3.select("#automaticWalkButton").classed("active")) {
+    d3.select("#automaticWalkButton").classed("active", false);
+    clearInterval(automaticWalkInterval);
+  }
+  else {
+    d3.select("#automaticWalkButton").classed("active", true);
+    automaticWalkInterval = setInterval(function () {walk();}, 500);
+  }
+}
+
+
 function update() {
 
   if(node != null) {
 
     node
       .transition()
-      .attr("r", function(d) {return (d.nbWalker/nbWalkerTot)* 60 + 25})
-      .style("fill", function(d) { 
-        var rybColor = [];
-        for(var i = 0; i < nbColor; i++) {
-          rybColor[i] = 255/100 * d.nbWalkers[i]; //
-        }
-        return "#" +(rybColorMixer.rybToRgb(rybColor, { hex: true}));
-      })	
-    node
-      .attr("title", function(d) { return d.nbWalker});
+      .attr("r", function(d) {return (sumArray(d.nbWalkers)/nbWalkerTot)* 100 +5})
+     // .attr("opacity", function(d) {return (sumArray(d.nbWalkers)/nbWalkerTot)*0.9+0.1 })
+      .style("fill", changeColorNode) 
+      .attr("title", function(d) { return d.nbWalkers[0] +"/"+d.nbWalkers[1] +"/"+d.nbWalkers[2] });
   }
+  
+  fillBarChart();
 
 }
 
 function reinitialization() {
   
+  d3.select("#automaticWalkButton").classed("active", false);
+    clearBarChart();
+  if(automaticWalkInterval != null)
+    clearInterval(automaticWalkInterval);
+    
   step = 1;
  
-  
-  for(var i = 0; i < graph.nodes.length; i++) {
-    graph.nodes[i].nbWalker = graph.X0[i];
-    
+  for(var i = 0; i < nbColor; i++) {
+    for(var j = 0; j < graph.nodes.length; j++) {
 
+        graph.nodes[i].nbWalkers[j] = 0;
+        graph.X0[i][j] = 0;
+    }
   }
   
-  
-  update();  
+  node
+    .transition()
+      .attr("r", 15)
+      .attr("title", function(d) { return d.nbWalkers[0] +"/"+d.nbWalkers[1] +"/"+d.nbWalkers[2] })
+      .style("fill", "#ffffff")
+
+}
+
+function changeColorNode(d) {
+    
+        
+  var maxWalker = getMaxOfArray(d.nbWalkers);
+        
+  var rybColor = [];
+  for(var i = 0; i < nbColor; i++) {
+    if(maxWalker != 0)
+      rybColor[i] = 255 * d.nbWalkers[i]/maxWalker; //
+    else
+      rybColor[i] = 0;
+  }
+  return "#" +(rybColorMixer.rybToRgb(rybColor, { hex: true}));
+         
 }
 </script>
 

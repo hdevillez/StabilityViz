@@ -16,7 +16,7 @@ function initGraph(svg) {
       for(var i = 0; i < nbColor; i++) {
         graph.findNode(id).nbWalkers[i] = 0;
       }
-      refreshGraph(graph);
+      //refreshGraph(graph);
   };
 
   graph.removeNode = function (id) {
@@ -57,7 +57,7 @@ function initGraph(svg) {
 
   graph.addLink = function (source, target, value) {
       graph.links.push({"source":graph.findNode(source),"target":graph.findNode(target),"value":value});
-      refreshGraph(graph);
+      //refreshGraph(graph);
   };
 
   graph.findNode = function(id) {
@@ -97,12 +97,7 @@ function initGraph(svg) {
   
     initMatrices(graph);
   }
-  
-  graph.changeWalker = function (walkers){};
-  
-  
  
-
   return graph;
 }
 
@@ -186,9 +181,9 @@ function initMatrices(graph) {
     if(lambda[i] < 1-epsilon)
       secondMaxLambda = Math.max(secondMaxLambda, lambda[i]); 
       
-     console.log(lambda[i]);
+     //console.log(lambda[i]); //Print the eigenvalues
   }
-  console.log(secondMaxLambda);
+  //console.log(secondMaxLambda); //Print the second greatest eigenvalue
 
   //var maxTime = math.log(epsilon)/math.log(secondMaxLambda);
   graph.maxTime = 10/(1-secondMaxLambda);
@@ -210,51 +205,20 @@ function initMatrices(graph) {
 
 function refreshGraph(graph) {
  
-  node = graph.vis.selectAll("circle").data(graph.nodes, function(d) { 
-            return d.id;
-            });
   link = graph.vis.selectAll(".link").data(graph.links, function(d) {
             return d.source.id + "-" + d.target.id; 
             });
+  
+  node = graph.vis.selectAll("circle").data(graph.nodes, function(d) { 
+            return d.id;
+            });
+
  
 
     
-  nodeEnter = node.enter().append("g")
+  /*nodeEnter = node.enter().append("g")
     .attr("class", "node")
-    .call(force.drag);
-     
-  nodeEnter
-    .append("svg:circle")
-      .attr("class", "node")
-      .attr("r", 15)
-      .style("fill", function(d) { 
-        var rybColor = [];
-        for(var i = 0; i < nbColor; i++) {
-          rybColor[i] = 255/100 * d.nbWalkers[i]; //
-        }
-        return "#" +(rybColorMixer.rybToRgb(rybColor, { hex: true}));
-      })	
-      //.style("fill-opacity", function(d) { return (d.nbWalker/nbWalkerTot)*0.9+0.1 })		
-      .on("click", mouseClick)
-      .call(force.drag);
-    
-  nodeEnter.append("title")
-    .text( function(d){return d.nbWalker;}) ;
-    
-  node
-      .transition()
-      .style("fill", function(d) { 
-        var rybColor = [];
-        for(var i = 0; i < nbColor; i++) {
-          rybColor[i] = 255/100 * d.nbWalkers[i]; //
-        }
-        return "#" +(rybColorMixer.rybToRgb(rybColor, { hex: true}));
-      })	
-      .style("stroke", "#000000")
-      .style("stroke-width", "3");
-    
-  node.exit()
-     .remove()
+    .call(force.drag);*/
      
   link.enter()
     .append("line")
@@ -263,6 +227,22 @@ function refreshGraph(graph) {
 
   link.exit()
     .remove();
+     
+  node.enter()
+    .append("svg:circle")
+      .attr("class", "node")
+      .attr("r", 15)
+      .attr("title", function(d) { return d.nbWalkers[0] +"/"+d.nbWalkers[1] +"/"+d.nbWalkers[2] })
+      .style("fill", "#ffffff")
+      .style("stroke", "#000000")
+      .style("stroke-width", "3")
+      .on("click", mouseClick)
+      .call(force.drag);
+    
+  node.exit()
+     .remove()
+     
+  
     
   force.on("tick", function() {
     link.attr("x1", function(d) { return d.source.x; })
@@ -278,8 +258,15 @@ function refreshGraph(graph) {
   //The node clicked gets the 100 walkers at time = 0
   function mouseClick(element){
     if(!initialNodeisClicked){
-                
-                
+      
+      if(element.color == "black")
+        nbWalkerTot+=100;  
+      
+      for(var i = 0; i < nbColor; i++) {
+           element.nbWalkers[i] = 0;
+           graph.X0[i][element.id] = 0;
+      }
+      
       switch(currColor) {
         case "#ff0000" :
            element.nbWalkers[0] = 100;
@@ -300,8 +287,10 @@ function refreshGraph(graph) {
       //update();
       //initialNodeisClicked=true;     
                                 
+      node.transition()
+        .style("fill", changeColorNode);  
 
-      //refreshGraph(graph);                    
+      //  update();                   
       //Reset the slider and the time
     
       d3.select("#time").property("value", 0);
