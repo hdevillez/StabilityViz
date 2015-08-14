@@ -2,7 +2,9 @@ var graphPartition = null;
 
 //Let the user select nodes to do the partition shown in the right corner of the page
 function partition(){
-  
+
+  sliders[0].goToNext();
+  setTimeout(function(){sliders[0].goToPrev();}, 3000);
   if(document.getElementById("partitionButton").value === "off") {
 
     document.getElementById("partitionButton").value = "on";
@@ -125,7 +127,7 @@ function initPartition() {
   }*/
   
   for(var iNode = 0; iNode < groupNode.length; iNode++) {
-        groupNode[iNode].color = rybColorMixer.rybToRgb(currColor);
+        groupNode[iNode].color = currColor;
   }
 
   

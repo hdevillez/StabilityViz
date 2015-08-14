@@ -11,7 +11,7 @@ function initGraph(svg) {
   graph.addNode = function (id) {
       graph.nodes.push({"id":id});
       graph.findNode(id).nbWalker = 0;  
-      graph.findNode(id).color = "black";
+      graph.findNode(id).color = "white";
       graph.findNode(id).nbWalkers = [];
       for(var i = 0; i < nbColor; i++) {
         graph.findNode(id).nbWalkers[i] = 0;
@@ -160,7 +160,7 @@ function initMatrices(graph) {
   }
     
   graph.P = graph.transitionMat();
-  console.log(graph.P.toString());
+
   var numericP = numeric.identity(graph.nodes.length);
   for(var i = 0; i < graph.nodes.length; i++) {
     for(var j = 0; j < graph.nodes.length; j++) {
@@ -168,8 +168,8 @@ function initMatrices(graph) {
       
     }
   }
-  console.log(graph.P.toString());
-  console.log(numericP);
+  //console.log(graph.P.toString());
+ // console.log(numericP);
   
   //Compute the spectral gap
   var lambda = numeric.eig(numericP).lambda.x;
@@ -178,16 +178,16 @@ function initMatrices(graph) {
   
   for(var i = 0; i < graph.nodes.length; i++) {
   
-    if(lambda[i] < 1-epsilon)
-      secondMaxLambda = Math.max(secondMaxLambda, lambda[i]); 
+    if(Math.abs(lambda[i]) < 1-epsilon)
+      secondMaxLambda = Math.max(secondMaxLambda, math.abs(lambda[i])); 
       
      //console.log(lambda[i]); //Print the eigenvalues
   }
   //console.log(secondMaxLambda); //Print the second greatest eigenvalue
 
   //var maxTime = math.log(epsilon)/math.log(secondMaxLambda);
-  graph.maxTime = 10/(1-secondMaxLambda);
-  console.log(graph.maxTime);
+  graph.maxTime = 5/(1-secondMaxLambda);
+  //console.log(graph.maxTime);
   d3.select("#time").property("max", graph.maxTime);
   
 
@@ -257,10 +257,8 @@ function refreshGraph(graph) {
     
   //The node clicked gets the 100 colored walkers at time = 0
   function mouseClick(element){
-    if(!initialNodeisClicked){
+    if(!d3.select("#startButton").classed("active")){
       
-      if(element.color == "black")
-        nbWalkerTot+=100;  
       
       for(var i = 0; i < nbColor; i++) {
            element.nbWalkers[i] = 0;
@@ -269,34 +267,52 @@ function refreshGraph(graph) {
       
       switch(currColor) {
         case "#ff0000" :
-           element.nbWalkers[0] = 100;
-           graph.X0[0][element.id] = element.nbWalkers[0];
-           break;
+          
+          if(element.color == "white")
+            nbWalkerTot+=100;                          
+
+          element.color = "red"
+          element.nbWalkers[0] = 100;
+          graph.X0[0][element.id] = element.nbWalkers[0];
+
+          break;
         case "#00ff00":
+          if(element.color == "white")
+            nbWalkerTot+=100;                          
+
+          element.color = "yellow"
+          
           element.nbWalkers[1] = 100;
           graph.X0[1][element.id] = element.nbWalkers[1];
+
           break;
         case "#0000ff" :
+          if(element.color == "white")
+            nbWalkerTot+=100;                          
+
+          element.color = "blue"
           element.nbWalkers[2] = 100;
           graph.X0[2][element.id] = element.nbWalkers[2];
+
+          break;
+          
+        case "#000000" :
+        
+          if(element.color != "white") {
+            element.color = "white";
+            nbWalkerTot -= 100;
+          }
+            
           break;
         default : break;
       }
       
-      element.color = currColor;        
-      //update();
-      //initialNodeisClicked=true;     
+      element.color = currColor;            
                                 
       node.transition()
         .style("fill", changeColorNode);  
 
-      //  update();                   
-      //Reset the slider and the time
-    
-
-
     }              
   }
 
-  
 }     

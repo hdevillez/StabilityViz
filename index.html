@@ -33,107 +33,109 @@ rect.selection {
   color: white; 
 }
 
-
-.btn {
-	-moz-box-shadow:inset 0px 0px 14px -3px #f2fadc;
-	-webkit-box-shadow:inset 0px 0px 14px -3px #f2fadc;
-	box-shadow:inset 0px 0px 14px -3px #f2fadc;
-	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #dbe6c4), color-stop(1, #9ba892));
-	background:-moz-linear-gradient(top, #dbe6c4 5%, #9ba892 100%);
-	background:-webkit-linear-gradient(top, #dbe6c4 5%, #9ba892 100%);
-	background:-o-linear-gradient(top, #dbe6c4 5%, #9ba892 100%);
-	background:-ms-linear-gradient(top, #dbe6c4 5%, #9ba892 100%);
-	background:linear-gradient(to bottom, #dbe6c4 5%, #9ba892 100%);
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#dbe6c4', endColorstr='#9ba892',GradientType=0);
-	background-color:#dbe6c4;
-	-moz-border-radius:6px;
-	-webkit-border-radius:6px;
-	border-radius:6px;
-	border:1px solid #b2b8ad;
-	display:inline-block;
-	cursor:pointer;
-	color:#757d6f;
-	font-family:Arial;
-	font-size: 12px;
-	font-weight:bold;
-	padding: 3px 24px;
-	text-decoration:none;
-	text-shadow:0px 1px 0px #ced9bf;
+.menu {
+  float:up;
 }
-.btn:hover {
-	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #9ba892), color-stop(1, #dbe6c4));
-	background:-moz-linear-gradient(top, #9ba892 5%, #dbe6c4 100%);
-	background:-webkit-linear-gradient(top, #9ba892 5%, #dbe6c4 100%);
-	background:-o-linear-gradient(top, #9ba892 5%, #dbe6c4 100%);
-	background:-ms-linear-gradient(top, #9ba892 5%, #dbe6c4 100%);
-	background:linear-gradient(to bottom, #9ba892 5%, #dbe6c4 100%);
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#9ba892', endColorstr='#dbe6c4',GradientType=0);
-	background-color:#9ba892;
-}
-.btn:active {
-	position:relative;
-	top:1px;
+.slider {
+  width: 700px; height: 500px;
+  overflow: hidden;
+ 
 }
 
-
-
-
-#completeGraph {
-
-  float:left;
+.slider > ul {
+  /* styled by JS to match the added width and height of all <li>’s */
+  position: relative;
+  -webkit-transition: 0.5s left;
+  -moz-transition: 0.5s left;
+  -ms-transition: 0.5s left;
+  -o-transition: 0.5s left;
+     
+  list-style: none;
+  margin: 0; padding: 0;
 }
+
+.slider > ul > li {
+  float: left;
+  width: 600px; height: 500px;
+}
+
 
 </style>
 
 
-<body>
+<body style ="background: #B0C4DE">
+<div class="menu">
+  <select name="graphsChoice" id="graphChoice" onchange="loadGraph()" selectedIndex = "1">
+  <option value="data/example1.json">example1</option>
+  <option value="data/example2.json">example2</option>
+  <option value="data/example3.json">example3</option>
+  <option value="data/example4.json">example4</option>
+  <option value="data/example5.json">example5</option>
+  </select>
+  <button onclick="partition()" value = "off" id = "partitionButton">Partition</button>
+  <button onclick="start()" value = "off" id = "startButton">Start</button>
+  <button onclick="reinitialization()">Reinitialization</button>
+  <button onclick="showEmptyBarChart()" id = "showBarChartButton" disabled="true" autocomplete="off">Show Bar Chart</button>
 
 
+</div>
+
+<div class="slider" style="float:left" >
+<ul id ="graphSlide">
+  <li><div id = "visGraph1"></li>
+  <li><div id = "visGraph2"></li>
+  <li><div id = "visGraph3"></li>
+  <li><div id = "visGraph4"></li>
+</ul>
+</div>
+
+<div class ="slider">
+<ul id ="sideSlide">
+  <li><div id = "visSlide1"></li>
+  <li><div id = "visSlide2"></li>
+  <li><div id = "visSlide3"></li>
+  <li><div id = "visSlide4"></li>
+</ul>
+
+</div>
 
 
-<p>Select Graph: </p>
-
-
-<select name="graphsChoice" id="graphChoice" onchange="loadGraph()" selectedIndex = "1">
-<option value="data/example1.json">example1</option>
-<option value="data/example2.json">example2</option>
-<option value="data/example3.json">example3</option>
-<option value="data/example4.json">example4</option>
-<option value="data/example5.json">example5</option>
-</select>
-<button onclick="partition()" value = "off" id = "partitionButton">Partition</button>
-<button onclick="walk(time+1)">Walk</button>
-<button onclick="automaticWalk()" id = "automaticWalkButton" >Automatic Walk</button>
-<button onclick="reinitialization()">Reinitialization</button>
-<button onclick="showEmptyBarChart()">Show Bar Chart</button>
-
-<p id="loadGraph"></p>
-
-
-
-<div id = "completeGraph"></div>
-<div id = "partitionGraph"></div>
 
 <p>
 
   <label for="time" 
-         style="display: inline-block; width: 240px; text-align: right">
+         style="display: inline-block; width: 120px; text-align: left">
          Time = <span id="time-value">0</span>
   </label>
-  <input type="range" min="0" max="150" id="time">
+  <input type="range" min="0" max="150" id="time" disabled="true" autocomplete="off">
 </p>
+  <button onclick="walk(time+getSpeedWalk())" id = "walkButton" disabled="true" autocomplete="off">Walk</button>
+  <button onclick="automaticWalk()" id = "automaticWalkButton" disabled="true" autocomplete="off">Automatic Walk</button>
 
+<button onclick="sliders[0].goToPrev()">+Prev</button>
+<button onclick="sliders[0].goToNext()">+Next</button>
+<button onclick="sliders[1].goToPrev()">Prev+s</button>
+<button onclick="sliders[1].goToNext()">Next+</button>
+
+
+<script> 
+var width = 600,
+    height = 500;
+</script>
 
 <script src="lib/d3.min.js"></script>
 <script src ="lib/math.js"></script>
 <script src ="lib/numeric.min.js"></script>
 <script src ="lib/ryb-color-mixer.js"></script>
 
+
 <script src ="loadJSON.js"></script>
 <script src ="readUserGraph.js"></script>
 <script src ="graph.js"></script>
 <script src ="partition.js"></script>
 <script src ="barChart.js"></script>
+<script src ="slider.js"></script>
+<script src ="slideshow.js"></script>
 
 
 
@@ -148,20 +150,17 @@ var color = d3.scale.category20(); //Array of random color
 
 var circles = null, lines = null, graph = null;
 
-var width = 600,
-    height = 500;
-    
 var force = d3.layout.force()
     .charge(-1000)
     .linkDistance(75)
     .size([width, height]);
 
 
-var svg = d3.select("#completeGraph").append("svg")
+var svg = d3.select("#visGraph1").append("svg")
     .attr("width", width)
     .attr("height", height);
     
-var svg2 = d3.select("#partitionGraph").append("svg")
+var svg2 = d3.select("#visSlide1").append("svg")
     .attr("width", width)
     .attr("height", height);
 
@@ -176,6 +175,8 @@ svg.append("rect")
   .attr("y", 5)
   .attr("rx", 15) // rounded corner
   .attr("ry", 15)
+  .style("stroke", "#000000")
+  .style("stroke-width", "3")
   .on("click", function() {
     currColor = "#ff0000";
     
@@ -224,6 +225,24 @@ svg.append("rect")
     d3.select(this).style("stroke", "#000000");
     d3.select(this).style("stroke-width", "3");
 });
+
+svg.append("rect")
+  .attr("class", "colorChoice")
+  .attr("width", 50)
+  .attr("height", 50)
+  .attr("fill", "white")
+  .attr("x", 185)
+  .attr("y", 5)
+  .attr("rx", 15) // rounded corner
+  .attr("ry", 15)
+  .on("click", function() {
+    currColor = "#000000";
+    
+    svg.selectAll(".colorChoice")
+      .style("stroke-width", "0");
+    d3.select(this).style("stroke", "#000000");
+    d3.select(this).style("stroke-width", "3");
+  });
 
 
 d3.select("#time").property("value", 0);
@@ -290,10 +309,30 @@ function automaticWalk() {
   }
   else {
     d3.select("#automaticWalkButton").classed("active", true);
-    automaticWalkInterval = setInterval(function () {walk(/*math.round(time + graph.maxTime/60)*/time+1);}, 500);
+    automaticWalkInterval = setInterval(function () {walk(time+getSpeedWalk());}, 500);
   }
 }
 
+
+var speedWalk = 3;
+function getSpeedWalk() {
+  switch(speedWalk) { 
+    case 1:
+      return 1;
+      break;
+    case 2:
+      return Math.round(graph.maxTime/50);
+      break;
+    case 3:
+      return Math.round(graph.maxTime/20);
+      break;
+    default:
+      return 1;
+  }
+  
+
+
+}
 
 function update() {
 
@@ -313,34 +352,67 @@ function update() {
 
 function reinitialization() {
   
-  d3.select("#automaticWalkButton").classed("active", false);
-
-  if(automaticWalkInterval != null) //Remove automatic walk
-    clearInterval(automaticWalkInterval);
+  if(d3.select("#automaticWalkButton").classed("active"))
+    automaticWalk(); // Stop the automatic walk
+  if(d3.select("#startButton").classed("active"))
+    start(); // Turn off the start button
   
-  
-  clearBarChart();   
-  time = 1;
- 
-  for(var i = 0; i < nbColor; i++) {
-    for(var j = 0; j < graph.nodes.length; j++) {
-
-        graph.nodes[j].nbWalkers[i] = 0;
-        graph.X0[i][j] = 0;
-    }
-  }
-  
-  node
-    .transition()
-      .attr("r", 15)
-      .attr("title", function(d) { return d.nbWalkers[0] +"/"+d.nbWalkers[1] +"/"+d.nbWalkers[2] })
-      .style("fill", "#ffffff")
-      
   d3.select("#time").property("value", 0);
   time = 0;
   d3.select("#time-value").text(time);
+  
+  if(automaticWalkInterval != null) //Remove automatic walk
+    clearInterval(automaticWalkInterval);
+  
+  clearBarChart();   
+
+ if(graph != null) {
+    for(var i = 0; i < nbColor; i++) {
+      for(var j = 0; j < graph.nodes.length; j++) {
+
+          graph.nodes[j].nbWalkers[i] = 0;
+          graph.nodes[j].color = "white";
+          graph.X0[i][j] = 0;
+      }
+    }
+    
+    node
+      .transition()
+        .attr("r", 15)
+        .attr("title", function(d) { return d.nbWalkers[0] +"/"+d.nbWalkers[1] +"/"+d.nbWalkers[2] })
+        .style("fill", "#ffffff")
+  }
 
 }
+
+function start() {
+ 
+ var buttonStart = d3.select("#startButton");
+ 
+ if(buttonStart.classed("active")) {
+    buttonStart.classed("active", false);
+    buttonStart.property("textContent", "Start");
+    
+    d3.select("#walkButton").property("disabled", true);
+    d3.select("#automaticWalkButton").property("disabled", true);
+    d3.select("#showBarChartButton").property("disabled", true);
+    d3.select("#time").property("disabled", true);
+    
+    reinitialization();
+
+  }
+  else if(nbWalkerTot >= 100){
+    buttonStart.classed("active", true);
+    buttonStart.property("textContent", "Stop");
+    
+    
+    d3.select("#walkButton").property("disabled", false);
+    d3.select("#automaticWalkButton").property("disabled", false);
+    d3.select("#showBarChartButton").property("disabled", false);
+    d3.select("#time").property("disabled", false);
+  }
+}
+
 
 function changeColorNode(d) {
     
@@ -357,6 +429,7 @@ function changeColorNode(d) {
   return "#" +(rybColorMixer.rybToRgb(rybColor, { hex: true}));
          
 }
+
 </script>
 
 

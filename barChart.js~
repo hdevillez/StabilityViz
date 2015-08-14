@@ -3,12 +3,12 @@ var margin = {top: 50, right: 20, bottom: 30, left: 30};
        
 var newHeight = 0;     
        
-var bar = graph.vis.selectAll(".bar").data(graph.nodes, function(d){
-                        return d.id;
-        });    
+   
  
 function showEmptyBarChart(){
- 
+
+        initSlideShow();
+
         var finalNbWalkers =[];
  
         for(var i = 0; i < nbColor; i++) {

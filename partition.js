@@ -2,7 +2,7 @@ var graphPartition = null;
 
 //Let the user select nodes to do the partition shown in the right corner of the page
 function partition(){
-  
+
   if(document.getElementById("partitionButton").value === "off") {
 
     document.getElementById("partitionButton").value = "on";

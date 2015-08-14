@@ -1,0 +1,12 @@
+var sliders = [];
+
+d3.selectAll('.slider').each(function() {
+  sliders.push(new Slider(this))   
+})
+  
+sliders[0].goTo(0);
+
+
+
+
+

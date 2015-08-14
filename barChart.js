@@ -6,7 +6,9 @@ var newHeight = 0;
    
  
 function showEmptyBarChart(){
- 
+
+        initSlideShow();
+
         var finalNbWalkers =[];
  
         for(var i = 0; i < nbColor; i++) {
