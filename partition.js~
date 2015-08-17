@@ -3,8 +3,6 @@ var graphPartition = null;
 //Let the user select nodes to do the partition shown in the right corner of the page
 function partition(){
 
-  sliders[0].goToNext();
-  setTimeout(function(){sliders[0].goToPrev();}, 3000);
   if(document.getElementById("partitionButton").value === "off") {
 
     document.getElementById("partitionButton").value = "on";
@@ -120,23 +118,9 @@ function partition(){
 
 function initPartition() {
   
-  /*for(var iNode = 0; iNode < graph.nodes.length; iNode++) {
-        
-        graph.nodes[iNode].color = "red";
-        console.log(graph.nodes[iNode]);
-  }*/
-  
   for(var iNode = 0; iNode < groupNode.length; iNode++) {
-        groupNode[iNode].color = currColor;
+    initColorNode(element);(groupNode[iNode]);
   }
-
-  
-  force
-    .nodes(graph.nodes)
-    .links(graph.links)
-    .start();
-    
-  refreshGraph(graph);
   
   groupNode = [];
 

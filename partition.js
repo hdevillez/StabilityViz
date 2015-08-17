@@ -118,23 +118,9 @@ function partition(){
 
 function initPartition() {
   
-  /*for(var iNode = 0; iNode < graph.nodes.length; iNode++) {
-        
-        graph.nodes[iNode].color = "red";
-        console.log(graph.nodes[iNode]);
-  }*/
-  
   for(var iNode = 0; iNode < groupNode.length; iNode++) {
-        groupNode[iNode].color = currColor;
+    initColorNode((groupNode[iNode]));
   }
-
-  
-  force
-    .nodes(graph.nodes)
-    .links(graph.links)
-    .start();
-    
-  refreshGraph(graph);
   
   groupNode = [];
 
