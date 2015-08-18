@@ -1,5 +1,7 @@
 var dataIsLoaded = true;
 
+
+//Load the graph encoded as a json file
 function loadD3(file) {
   if(dataIsLoaded){
     
@@ -31,24 +33,16 @@ function loadD3(file) {
 }
 
 function loadGraph(){
-
-
-
   reinitialization();
-  
+  clearBarChart();
   
   if(automaticWalkInterval != null) //Remove automatic walk
     clearInterval(automaticWalkInterval);
   
   
-  file = document.getElementById("graphChoice").value;
-//console.log(document.getElementById("graphChoice").value);
+  file = document.getElementById("graphChoice").value; //Get the name file
 
-  initialNodeisClicked = false;
-  clearBarChart();
+
   loadD3(file);
-  
-
-  
 };
 

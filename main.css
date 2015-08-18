@@ -1,0 +1,63 @@
+.node {
+  stroke: #fff;
+  stroke-width: 1.5px;
+}
+
+.link {
+  stroke: #999;
+  stroke-opacity: .6;
+   
+}
+
+rect.selection {
+  fill: transparent;
+  stroke-dasharray: 3px;
+  stroke: black;
+  stroke-width: 2px;
+}
+ 
+ 
+.selected {
+   stroke: blue;
+   stroke-width: 5;
+   stroke-dasharray: 3;
+}
+
+.active {
+  border:3px solid grey; 
+  background-color: grey;
+  color: white; 
+}
+
+.menu {
+  float:up;
+}
+
+.slideBox {
+  width : 49%; height : 550px;
+  border:2px solid black;
+  border-radius: 25px;
+}
+.slider {
+  width: 100%; height: 500px;
+  overflow: hidden;
+
+}
+
+.slider > ul {
+  /* styled by JS to match the added width and height of all <li>’s */
+  position: relative;
+  -webkit-transition: 0.5s left;
+  -moz-transition: 0.5s left;
+  -ms-transition: 0.5s left;
+  -o-transition: 0.5s left;
+     
+  list-style: none;
+  margin: 0; padding: 0;
+}
+
+.slider > ul > li {
+  float: left;
+  width: 50%; height: 500px;
+}
+

@@ -32,11 +32,9 @@ function loadD3(file) {
 
 function loadGraph(){
 
-  d3.select("#time").property("value", 0);
-  time = 0;
-  d3.select("#time-value").text(time);
 
 
+  reinitialization();
   
   
   if(automaticWalkInterval != null) //Remove automatic walk
@@ -50,7 +48,7 @@ function loadGraph(){
   clearBarChart();
   loadD3(file);
   
-  reinitialization();
+
   
 };
 

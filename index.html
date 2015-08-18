@@ -1,72 +1,8 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
-<style>
-
-.node {
-  stroke: #fff;
-  stroke-width: 1.5px;
-}
-
-.link {
-  stroke: #999;
-  stroke-opacity: .6;
-   
-}
-
-rect.selection {
-  fill: transparent;
-  stroke-dasharray: 3px;
-  stroke: black;
-  stroke-width: 2px;
-}
- 
- 
-.selected {
-   stroke: blue;
-   stroke-width: 5;
-   stroke-dasharray: 3;
-}
-
-.active {
-  border:3px solid grey; 
-  background-color: grey;
-  color: white; 
-}
-
-.menu {
-  float:up;
-}
-
-.slideBox {
-  width : 49%; height : 550px;
-  border:2px solid black;
-  border-radius: 25px;
-}
-.slider {
-  width: 100%; height: 500px;
-  overflow: hidden;
-
-}
-
-.slider > ul {
-  /* styled by JS to match the added width and height of all <li>’s */
-  position: relative;
-  -webkit-transition: 0.5s left;
-  -moz-transition: 0.5s left;
-  -ms-transition: 0.5s left;
-  -o-transition: 0.5s left;
-     
-  list-style: none;
-  margin: 0; padding: 0;
-}
-
-.slider > ul > li {
-  float: left;
-  width: 50%; height: 500px;
-}
-
-
-</style>
+<head>
+<link rel="stylesheet" type"text/css" href="main.css">
+</head>
 
 
 <body style ="background: #B0C4DE">
@@ -105,8 +41,8 @@ rect.selection {
   
   <div class ="slider">
     <ul id ="sideSlide">
-      <li><div id = "visSide1"></li>
       <li><div id = "visSide2"></li>
+      <li><div id = "visSide1"></li>
       <li><div id = "visSide3"></li>
       <li><div id = "visSide4"></li>
     </ul>
@@ -169,96 +105,6 @@ var force = d3.layout.force()
     .charge(-1000)
     .linkDistance(75)
     .size([width, height]);
-
-
-
-var currColor = "#ff0000";
-
-svg.append("rect")
-  .attr("class", "colorChoice")
-  .attr("width", 50)
-  .attr("height", 50)
-  .attr("fill", "red")
-  .attr("x", 5)
-  .attr("y", 5)
-  .attr("rx", 15) // rounded corner
-  .attr("ry", 15)
-  .style("stroke", "#000000")
-  .style("stroke-width", "3")
-  .on("click", function() {
-    currColor = "#ff0000";
-    
-    svg.selectAll(".colorChoice")
-      .style("stroke-width", "0");
-    d3.select(this).style("stroke", "#000000");
-    d3.select(this).style("stroke-width", "3");
-  });
-
-svg.append("rect")
-  .attr("class", "colorChoice")
-  .attr("width", 50)
-  .attr("height", 50)
-  .attr("fill", "yellow")
-  .attr("x", 65)
-  .attr("y", 5)
-  .attr("rx", 15)
-  .attr("ry", 15)
-  .on("click", function() {
-    currColor = "#00ff00";
-    
-    svg.selectAll(".colorChoice")
-      .style("stroke-width", "0");
-    
-    d3.select(this).style("stroke", "#000000");
-    d3.select(this).style("stroke-width", "3");
-
-    
-
-  });
-  
-svg.append("rect")
-  .attr("class", "colorChoice")
-  .attr("width", 50)
-  .attr("height", 50)
-  .attr("fill", "blue")
-  .attr("x", 125)
-  .attr("y", 5)
-  .attr("rx", 15)
-  .attr("ry", 15)
-  .on("click", function() {
-    currColor = "#0000ff";
-    
-    svg.selectAll(".colorChoice")
-      .style("stroke-width", "0");
-    d3.select(this).style("stroke", "#000000");
-    d3.select(this).style("stroke-width", "3");
-});
-
-svg.append("rect")
-  .attr("class", "colorChoice")
-  .attr("width", 50)
-  .attr("height", 50)
-  .attr("fill", "white")
-  .attr("x", 185)
-  .attr("y", 5)
-  .attr("rx", 15) // rounded corner
-  .attr("ry", 15)
-  .on("click", function() {
-    currColor = "#000000";
-    
-    svg.selectAll(".colorChoice")
-      .style("stroke-width", "0");
-    d3.select(this).style("stroke", "#000000");
-    d3.select(this).style("stroke-width", "3");
-  });
-
-
-d3.select("#time").property("value", 0);
-d3.select("#graphChoice").property("selectedIndex", 0);
-d3.select("#time").on("input", function() {
-  walk(+this.value);
-});
-
 
 var time = 0;
 var initialNodeisClicked = false;
@@ -377,6 +223,7 @@ function reinitialization() {
   
   if(automaticWalkInterval != null) //Remove automatic walk
     clearInterval(automaticWalkInterval);
+  speedWalk = 1;
   
   clearBarChart();   
 
@@ -386,7 +233,7 @@ function reinitialization() {
       for(var j = 0; j < graph.nodes.length; j++) {
 
           graph.nodes[j].nbWalkers[i] = 0;
-          graph.nodes[j].color = "white";
+          graph.nodes[j].color = "#000000";
           graph.X0[i][j] = 0;
       }
     }
@@ -403,6 +250,8 @@ function reinitialization() {
 function start() {
  
  var buttonStart = d3.select("#startButton");
+ 
+ showEmptyBarChart();
  
  if(buttonStart.classed("active")) {
     buttonStart.classed("active", false);
@@ -467,55 +316,29 @@ function initColorNode(element) {
     element.nbWalkers[i] = 0;
     graph.X0[i][element.id] = 0;
   }
-      
-  switch(currColor) {
-    case "#ff0000" :
-          
-      if(element.color == "white")
-        nbWalkerTot+=100;                          
-
-      element.color = "red"
-      element.nbWalkers[0] = 100;
-      graph.X0[0][element.id] = element.nbWalkers[0];
-      break;
+  
+  if(element.color == "#000000" && currColor != "#000000")
+    nbWalkerTot += 100;
+  if(element.color != "#000000" && currColor == "#000000")
+    nbWalkerTot -= 100;
     
-    case "#00ff00":
-      if(element.color == "white")
-        nbWalkerTot+=100;                          
+  var arrayColor = rybColorMixer.hexToArray(currColor);
+  for(var i = 0; i < nbColor; i++) {
+  
 
-      element.color = "yellow"
-          
-      element.nbWalkers[1] = 100;
-      graph.X0[1][element.id] = element.nbWalkers[1];
-
-      break;
-    
-    case "#0000ff" :
-      if(element.color == "white")
-        nbWalkerTot+=100;                          
-
-      element.color = "blue"
-      element.nbWalkers[2] = 100;
-      graph.X0[2][element.id] = element.nbWalkers[2];
-
-      break;
-          
-    case "#000000" :
-        
-      if(element.color != "white") {
-        element.color = "white";
-        nbWalkerTot -= 100;
-      }
-            
-      break;
-    
-    default : break;
+    console.log(arrayColor);
+    if(arrayColor[i] > 0)
+      element.nbWalkers[i] = 100*255/sumArray(arrayColor);
+    else
+      element.nbWalkers[i] = 0;
+   
+    graph.X0[i][element.id] = element.nbWalkers[i];
+    element.color = currColor;
   }
-      
-  //element.color = currColor;            
-                                
+  
   node.transition()
-    .style("fill", changeColorNode);  
+    .style("fill", changeColorNode)
+    .attr("title", function(d) { return d.nbWalkers[0] +"/"+d.nbWalkers[1] +"/"+d.nbWalkers[2] });
         
   console.log(nbWalkerTot);
   

@@ -11,7 +11,7 @@ function initGraph(svg) {
   graph.addNode = function (id) {
       graph.nodes.push({"id":id});
       graph.findNode(id).nbWalker = 0;  
-      graph.findNode(id).color = "white";
+      graph.findNode(id).color = "#000000";
       graph.findNode(id).nbWalkers = [];
       for(var i = 0; i < nbColor; i++) {
         graph.findNode(id).nbWalkers[i] = 0;
@@ -30,7 +30,7 @@ function initGraph(svg) {
           else i++;
       }
       graph.nodes.splice(graph.findNodeIndex(id),1);
-      refreshGraph(graph);
+      //refreshGraph(graph);
   };
 
   graph.removeLink = function (source,target){
@@ -42,7 +42,7 @@ function initGraph(svg) {
               break;
           }
       }
-      refreshGraph(graph);
+     // refreshGraph(graph);
   };
 
   graph.removeAllLinks = function(){
