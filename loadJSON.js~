@@ -90,15 +90,32 @@ function parsePajek(pajek){
   
   //Parse the links
   
-  if(lines[1].toLowerCase() == "*edges" ||lines[1].toLowerCase() == "*arcs") {
-    for(var i = 2; i < lines.length-1; i++) {
+  var indexOfFirstLink = -1;
+  for(var i = 1; indexOfFirstLink == -1 && i < lines.length-1; i++) { 
+    if(lines[i].indexOf("*") != -1)
+      indexOfFirstLink = i;
+  }
+  if(indexOfFirstLink == -1) { 
+    alert("Format error");
+    return undefined;
+  }
+
+  if(lines[indexOfFirstLink].toLowerCase() == "*edges" ||lines[indexOfFirstLink].toLowerCase() == "*arcs") {
+    for(var i = indexOfFirstLink+1; i < lines.length-1; i++) {
       var link = lines[i].split(" ");
       console.log(link);
+      
+      if(link[0] <= 0 || link[0] > nbNodes || link[1] <= 0 || link[1] > nbNodes) {
+          alert("Format error");
+          return undefined;
+      }
+      
+      console.log(link.length);
       if(link.length == 2) {
-        data.links.push({"source" : +link[0], "target" : +link[1], "value" : 1});
+        data.links.push({"source" : +link[0]-1, "target" : +link[1]-1, "value" : 1});
       }
       else if(link.length == 3) {
-        data.links.push({"source" : +link[0], "target" : +link[1], "value" : +link[2]});
+        data.links.push({"source" : +link[0]-1, "target" : +link[1]-1, "value" : Math.max(1, +link[2])});
       }
       else {
         alert("Format error");
@@ -108,8 +125,25 @@ function parsePajek(pajek){
     }
   
   }
-
- 
+  else if(lines[indexOfFirstLink].toLowerCase() == "*edgeslist") {
+    for(var i = 2; i < lines.length-1; i++) {
+        var link = lines[i].split(" ");
+        console.log(link);
+        if(link[i] <= 0 || link[i] > nbNodes) {
+          alert("Format error");
+          return undefined;
+        }
+          
+        for(var j = 1; j < links.length-1; j++) {
+          if(link[j] <= 0 || link[j] >= nbNodes) {
+            alert("Format error");
+            return undefined;
+          }
+          data.links.push({"source" : +link[i]-1, "target" : +link[j]-1, "value" : 1});
+        }
+        
+      }            
+  }
 
   console.log(data);
   return data;

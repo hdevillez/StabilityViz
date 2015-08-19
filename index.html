@@ -154,6 +154,10 @@ function sumLineArray2D(tab2D, line){
         return sum;
 }
 
+d3.select("#time").on("change", function () {
+  walk(d3.select("#time").property("value"));
+});
+
 function walk(newTime) {
   
   time = newTime;

@@ -133,7 +133,7 @@ var force = d3.layout.force()
 var time = 0;
 var initialNodeisClicked = false;
 
-loadInternFile("data/example1.json");
+loadInternFile();
 
 function getMaxOfArray(numArray) {
   return Math.max.apply(null, numArray);
@@ -153,6 +153,10 @@ function sumLineArray2D(tab2D, line){
         }
         return sum;
 }
+
+d3.select("#time").on("change", function () {
+  walk(d3.select("#time").property("value"));
+});
 
 function walk(newTime) {
   
