@@ -17,17 +17,29 @@
   <button onclick="partition()" value = "off" id = "partitionButton">Partition</button>
   <button onclick="start()" value = "off" id = "startButton">Start</button>
   <button onclick="reinitialization()">Reinitialization</button>
-  <button onclick="showEmptyBarChart()" id = "showBarChartButton" disabled="true" autocomplete="off">Show Bar Chart</button>
+
 
 
 </div>
 <div class = "slideBox" style = "float:left">
   <div class="slider">
     <ul id ="graphSlide">
-      <li><div id = "visGraph1"></li>
-      <li><div id = "visGraph2"></li>
-      <li><div id = "visGraph3"></li>
-      <li><div id = "visGraph4"></li>
+      <li>
+        <div class ="headerSlider" id = "headerVisGraph1"></div>
+        <div class ="bodySlider" id = "bodyVisGraph1"></div>
+      </li>
+      <li>
+        <div class ="headerSlider" id = "headerVisGraph2"></div>
+        <div class ="bodySlider" id = "bodyVisGraph2"></div>
+      </li>
+      <li>
+        <div class ="headerSlider" id = "headerVisGraph3"></div>
+        <div class "bodySlider" id = "bodyVisGraph3"></div>
+      </li>
+      <li>
+        <div class ="headerSlider" id = "headerVisGraph4"></div>
+        <div class ="bodySlider" id = "bodyVisGraph4"></div>
+      </li>
    </ul>
   </div>
   
@@ -41,10 +53,22 @@
   
   <div class ="slider">
     <ul id ="sideSlide">
-      <li><div id = "visSide2"></li>
-      <li><div id = "visSide1"></li>
-      <li><div id = "visSide3"></li>
-      <li><div id = "visSide4"></li>
+      <li>
+        <div class ="headerSlider" id = "headerVisSide1"></div>
+        <div class ="bodySlider" id = "bodyVisSide1"></div>
+      </li>
+      <li>
+        <div class ="headerSlider" id = "headerVisSide2"></div>
+        <div class ="bodySlider" id = "bodyVisSide2"></div>
+      </li>
+      <li>
+        <div class ="headerSlider" id = "headerVisSide3"></div>
+        <div class "bodySlider" id = "bodyVisSide3"></div>
+      </li>
+      <li>
+        <div class ="headerSlider" id = "headerVisSide4"></div>
+        <div class ="bodySlider" id = "bodyVisSide4"></div>
+      </li>
     </ul>
   </div>
 
@@ -88,7 +112,7 @@
 <script src ="slider.js"></script>
 <script src ="slideshow.js"></script>
 
-
+<input type="file" id="fileInput" onchange = "loadF()">
 
 <script>
 
@@ -233,7 +257,7 @@ function reinitialization() {
       for(var j = 0; j < graph.nodes.length; j++) {
 
           graph.nodes[j].nbWalkers[i] = 0;
-          graph.nodes[j].color = "white";
+          graph.nodes[j].color = "#000000";
           graph.X0[i][j] = 0;
       }
     }
@@ -343,7 +367,10 @@ function initColorNode(element) {
   console.log(nbWalkerTot);
   
 }     
+
+
 </script>
+
 
 
 

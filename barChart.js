@@ -117,8 +117,8 @@ function showRepartition(element, bar){
       fill: "yellow",
       x: bar.attr("x"),
       width: bar.attr("width"),
-      height: (element.nbWalkers[1])*6*100/nbWalkerTot,
-      y: height - margin.bottom - margin.top - (element.nbWalkers[0])*height*(80/100)/nbWalkerTot - (element.nbWalkers[1])*height*(80/100)/nbWalkerTot
+      height: (element.nbWalkers[0])*height*(80/100)/nbWalkerTot,
+      y: height - margin.bottom - margin.top - (element.nbWalkers[0])*height*(80/100)/nbWalkerTot/nbWalkerTot
     })
     .on("mouseup", function(){
       clearRepartition();

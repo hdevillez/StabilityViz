@@ -33,16 +33,15 @@ function loadD3(file) {
 }
 
 function loadGraph(){
+
   reinitialization();
   clearBarChart();
   
-  if(automaticWalkInterval != null) //Remove automatic walk
-    clearInterval(automaticWalkInterval);
-  
-  
   file = document.getElementById("graphChoice").value; //Get the name file
-
 
   loadD3(file);
 };
+
+
+
 
