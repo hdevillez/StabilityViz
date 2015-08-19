@@ -82,7 +82,7 @@ function initGraph(svg) {
     for(var i = 0; i < data.links.length; i++) {
       graph.addLink(data.links[i].source, data.links[i].target, data.links[i].value);
     }
-    
+    // console.log(graph);
      initMatrices(graph);
   }
   

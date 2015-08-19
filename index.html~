@@ -7,7 +7,7 @@
 
 <body style ="background: #B0C4DE">
 <div class="menu">
-  <select name="graphsChoice" id="graphChoice" onchange="loadGraph()" selectedIndex = "1">
+  <select name="graphsChoice" id="graphChoice" onchange="loadInternFile()" selectedIndex = "1">
   <option value="data/example1.json">example1</option>
   <option value="data/example2.json">example2</option>
   <option value="data/example3.json">example3</option>
@@ -112,7 +112,7 @@
 <script src ="slider.js"></script>
 <script src ="slideshow.js"></script>
 
-<input type="file" id="fileInput" onchange = "loadF()">
+<input type="file" id="fileInput" onchange = "loadExternFile()">
 
 <script>
 
@@ -133,7 +133,7 @@ var force = d3.layout.force()
 var time = 0;
 var initialNodeisClicked = false;
 
-loadGraph("data/example1.json");
+loadInternFile("data/example1.json");
 
 function getMaxOfArray(numArray) {
   return Math.max.apply(null, numArray);
