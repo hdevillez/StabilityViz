@@ -17,7 +17,8 @@
   <button onclick="partition()" value = "off" id = "partitionButton">Partition</button>
   <button onclick="start()" value = "off" id = "startButton">Start</button>
   <button onclick="reinitialization()">Reinitialization</button>
-
+  <button onclick="sliders[0].goTo(0)">Graph</button>
+  <button onclick="sliders[0].goTo(1)">Bar chart</button>
 
 
 </div>
@@ -27,6 +28,7 @@
       <li>
         <div class ="headerSlider" id = "headerVisGraph1"></div>
         <div class ="bodySlider" id = "bodyVisGraph1"></div>
+        <div class ="tailSlider" i d = "tailVisGraph1"></div>
       </li>
       <li>
         <div class ="headerSlider" id = "headerVisGraph2"></div>
@@ -154,7 +156,7 @@ function sumLineArray2D(tab2D, line){
         return sum;
 }
 
-d3.select("#time").on("change", function () {
+d3.select("#time").on("input", function () {
   walk(d3.select("#time").property("value"));
 });
 
@@ -206,13 +208,13 @@ function setSpeedWalk(sw) {
 function getSpeedWalk() {
   switch(speedWalk) { 
     case 1:
-      return 1;
+      return +1;
       break;
     case 2:
-      return Math.round(graph.maxTime/50);
+      return +Math.round(graph.maxTime/50);
       break;
     case 3:
-      return Math.round(graph.maxTime/20);
+      return +Math.round(graph.maxTime/20);
       break;
     default:
       return 1;
@@ -326,11 +328,11 @@ function changeColorNode(d) {
     
         
   var maxWalker = getMaxOfArray(d.nbWalkers);
-        
+
   var rybColor = [];
   for(var i = 0; i < nbColor; i++) {
     if(maxWalker != 0)
-      rybColor[i] = 255 * d.nbWalkers[i]/maxWalker; //
+      rybColor[i] = 255 * (d.nbWalkers[i]/maxWalker) * Math.sqrt(Math.sqrt(Math.sqrt(sumArray(d.nbWalkers)/nbWalkerTot))); //
     else
       rybColor[i] = 0;
   }

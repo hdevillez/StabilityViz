@@ -117,11 +117,11 @@ function partition(){
 }
 
 function initPartition() {
-  
-  for(var iNode = 0; iNode < groupNode.length; iNode++) {
-    initColorNode((groupNode[iNode]));
+  if(!d3.select("#startButton").classed("active")){
+    for(var iNode = 0; iNode < groupNode.length; iNode++) {
+      initColorNode((groupNode[iNode]));
+    }
   }
-  
   groupNode = [];
 
 }

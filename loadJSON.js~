@@ -47,7 +47,7 @@ function loadExternFile() {
 
     if(inputFile.files[0].name.match('\.json'))
       data = JSON.parse(reader.result);
-    else if(inputFile.files[0].name.match('\.NET'))
+    else if(inputFile.files[0].name.match('\.net'))
       data = parsePajek(reader.result);
     
     console.log(data);

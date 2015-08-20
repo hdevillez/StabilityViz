@@ -56,7 +56,18 @@ function initGraph(svg) {
   };
 
   graph.addLink = function (source, target, value) {
-      graph.links.push({"source":graph.findNode(source),"target":graph.findNode(target),"value":value});
+  
+      var linkIsNew = true;
+      for(var i = 0; i < graph.links.length; i++) {
+        for(var j = 0; j < graph.links.length; j++) {
+          if((graph.links[i].target.id == target && graph.links[i].source.id == source) || 
+             (graph.links[i].target.id == source && graph.links[i].source.id == target))
+            
+            linkIsNew = false;
+        }
+      }
+      if(linkIsNew)
+        graph.links.push({"source":graph.findNode(source),"target":graph.findNode(target),"value":value});
       //refreshGraph(graph);
   };
 
@@ -169,7 +180,7 @@ function initMatrices(graph) {
     }
   }
   //console.log(graph.P.toString());
- // console.log(numericP);
+  // console.log(numericP);
   
   //Compute the spectral gap
   var lambda = numeric.eig(numericP).lambda.x;

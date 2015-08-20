@@ -100,7 +100,7 @@ function parsePajek(pajek){
     return undefined;
   }
 
-  if(lines[indexOfFirstLink].toLowerCase() == "*edges" ||lines[indexOfFirstLink].toLowerCase() == "*arcs") {
+  if(lines[indexOfFirstLink].toLowerCase().indexOf("*edges") != -1 ||lines[indexOfFirstLink].toLowerCase().indexOf("*arcs")!= -1) {
     for(var i = indexOfFirstLink+1; i < lines.length-1; i++) {
       var link = lines[i].split(" ");
       console.log(link);

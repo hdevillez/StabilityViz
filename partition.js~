@@ -119,7 +119,7 @@ function partition(){
 function initPartition() {
   
   for(var iNode = 0; iNode < groupNode.length; iNode++) {
-    initColorNode(element);(groupNode[iNode]);
+    initColorNode((groupNode[iNode]));
   }
   
   groupNode = [];

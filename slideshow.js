@@ -14,6 +14,8 @@ var svg = d3.select("#bodyVisGraph1").append("svg")
 var colorTab = ["#ff0000", "#00ff00", "#0000ff","#ffff00", "#00ffff", "#ff00ff", "#ffffff", "#000000"];
 var currColor = "#ff0000";
 
+var intervale = (width - 50*colorTab.length)/(colorTab.length+1);
+
 svgColor.selectAll(".colorChoice")
     .data(colorTab)
   .enter().append("rect")
@@ -21,7 +23,7 @@ svgColor.selectAll(".colorChoice")
   .attr("width", 50)
   .attr("height", 50)
   .attr("fill", function (d, i) { return"#" +(rybColorMixer.rybToRgb(colorTab[i], { hex: true}))})
-  .attr("x", function(d, i) { return i*60+5})
+  .attr("x", function(d, i) { return i*(50 + intervale) + intervale})
   .attr("y", 5)
   .attr("rx", 15) // rounded corner
   .attr("ry", 15)
@@ -33,10 +35,12 @@ svgColor.selectAll(".colorChoice")
       .style("stroke-width", "0");
     d3.select(this).style("stroke-width", "3");
   });
-for(var i = 0; i < colorTab.length; i++) {
+  
+  
+/*for(var i = 0; i < colorTab.length; i++) {
   svg.append("rect")
   
-}
+}*/
     
 document.getElementById("headerVisSide1")
   .innerHTML = "Repartition of the walkers";
@@ -47,7 +51,7 @@ document.getElementById("headerVisSide1")
     .attr("width", width)
     .attr("height", 60);*/
     
-var svg2 = d3.select("#bodyVisSide1").append("svg")
+var svg2 = d3.select("#bodyVisGraph2").append("svg")
     .attr("width", width)
     .attr("height", height);
 
