@@ -6,7 +6,7 @@ var newHeight = 0;
      
 function showEmptyBarChart(){
   
-  margin.left = ((width - (width/(graph.nodes.length+1)+width/((graph.nodes.length+1)*(graph.nodes.length+1))) * (graph.nodes.length-1) - width/(graph.nodes.length+1))/2);
+  margin.left = ((width - 2*(width/(graph.nodes.length+1)+width/((graph.nodes.length+1)*(graph.nodes.length+1))) * (graph.nodes.length-1) - width/(graph.nodes.length+1))/2);
   margin.top = height * 10/100;
   margin.bottom = height*10/100;
             
@@ -117,7 +117,7 @@ function showRepartition(element, bar){
       fill: "yellow",
       x: bar.attr("x"),
       width: bar.attr("width"),
-      height: (element.nbWalkers[1])*6*100/nbWalkerTot,
+      height: (element.nbWalkers[0])*height*(80/100)/nbWalkerTot,
       y: height - margin.bottom - margin.top - (element.nbWalkers[0])*height*(80/100)/nbWalkerTot/nbWalkerTot
     })
     .on("mouseup", function(){

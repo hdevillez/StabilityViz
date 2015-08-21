@@ -19,7 +19,7 @@
   <button onclick="reinitialization()">Reinitialization</button>
   <button onclick="sliders[0].goTo(0)">Graph</button>
   <button onclick="sliders[0].goTo(1)">Bar chart</button>
-
+  <input type="file" id="fileInput" onchange = "loadExternFile()">
 
 </div>
 <div class = "slideBox" style = "float:left">
@@ -47,7 +47,24 @@
   
   
   <button onclick="sliders[0].goToPrev()" style="float:left">Prev</button>
+
+
+  <label for="time" 
+         style="display: inline-block; width: 120px; text-align: center;">
+         Time = <span id="time-value">0</span>
+  </label>
+  <input type="range" min="0" max="150" id="time" disabled="true" autocomplete="off">
+
   <button onclick="sliders[0].goToNext()" style="float:right">Next</button>
+  <button onclick="walk(time+getSpeedWalk())" id = "walkButton" disabled="true" autocomplete="off">Walk</button>
+<button onclick="automaticWalk()" id = "automaticWalkButton" disabled="true" autocomplete="off">Automatic Walk</button>
+<p style = "text-align : center">Speed :
+  <button onclick="setSpeedWalk(1)" id = "setSpeedWalkButton1" disabled="true" autocomplete="off">1</button>
+  <button onclick="setSpeedWalk(2)" id = "setSpeedWalkButton2" disabled="true" autocomplete="off">2</button>
+  <button onclick="setSpeedWalk(3)" id = "setSpeedWalkButton3" disabled="true" autocomplete="off">3</button>
+</p>
+
+
 
 </div>
 
@@ -79,24 +96,6 @@
 </div>
 
 
-<p>
-
-  <label for="time" 
-         style="display: inline-block; width: 120px; text-align: left;">
-         Time = <span id="time-value">0</span>
-  </label>
-  <input type="range" min="0" max="150" id="time" disabled="true" autocomplete="off">
-</p>
-
-<button onclick="walk(time+getSpeedWalk())" id = "walkButton" disabled="true" autocomplete="off">Walk</button>
-<button onclick="automaticWalk()" id = "automaticWalkButton" disabled="true" autocomplete="off">Automatic Walk</button>
-<p>Speed :
-  <button onclick="setSpeedWalk(1)" id = "setSpeedWalkButton1" disabled="true" autocomplete="off">1</button>
-  <button onclick="setSpeedWalk(2)" id = "setSpeedWalkButton2" disabled="true" autocomplete="off">2</button>
-  <button onclick="setSpeedWalk(3)" id = "setSpeedWalkButton3" disabled="true" autocomplete="off">3</button>
-</p>
-
-
 
 
 
@@ -114,11 +113,10 @@
 <script src ="slider.js"></script>
 <script src ="slideshow.js"></script>
 
-<input type="file" id="fileInput" onchange = "loadExternFile()">
+
 
 <script>
 
-var NB_MAX_COLOR = 10;
 var nbColor = 3;
 var nbWalkerTot = 0;
 var groupNode = []; //Array containing the nodes selected
@@ -133,7 +131,6 @@ var force = d3.layout.force()
     .size([width, height]);
 
 var time = 0;
-var initialNodeisClicked = false;
 
 loadInternFile();
 
@@ -157,7 +154,7 @@ function sumLineArray2D(tab2D, line){
 }
 
 d3.select("#time").on("input", function () {
-  walk(d3.select("#time").property("value"));
+  walk(+d3.select("#time").property("value"));
 });
 
 function walk(newTime) {
@@ -219,9 +216,6 @@ function getSpeedWalk() {
     default:
       return 1;
   }
-  
-
-
 }
 
 function update() {

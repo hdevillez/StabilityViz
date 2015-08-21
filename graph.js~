@@ -179,26 +179,27 @@ function initMatrices(graph) {
       
     }
   }
-  //console.log(graph.P.toString());
-  // console.log(numericP);
-  
-  //Compute the spectral gap
-  var lambda = numeric.eig(numericP).lambda.x;
-  var secondMaxLambda = 0;
-  var epsilon = math.pow(10, -10);
-  
-  for(var i = 0; i < graph.nodes.length; i++) {
-  
-    if(Math.abs(lambda[i]) < 1-epsilon)
-      secondMaxLambda = Math.max(secondMaxLambda, math.abs(lambda[i])); 
-      
-     //console.log(lambda[i]); //Print the eigenvalues
-  }
-  //console.log(secondMaxLambda); //Print the second greatest eigenvalue
 
-  //var maxTime = math.log(epsilon)/math.log(secondMaxLambda);
-  graph.maxTime = 5/(1-secondMaxLambda);
-  //console.log(graph.maxTime);
+  
+  //Compute the maximal time of the Markovian diffusion process
+  
+  try {
+    var lambdas = numeric.eig(numericP).lambda.x;
+    var secondMaxLambda = 0;
+    var epsilon = math.pow(10, -10);
+    
+    for(var i = 0; i < graph.nodes.length; i++) {
+    
+      if(Math.abs(lambdas[i]) < 1-epsilon)
+        secondMaxLambda = Math.max(secondMaxLambda, math.abs(lambda[i])); 
+    }
+    
+    graph.maxTime = 5/(1-secondMaxLambda);
+  } catch(err) { //The numeric.eig sometimes crashs
+    graph.maxTime = Math.pow(graph.nodes.length,2);
+    console.log("Error in the computation of the spectral gap :");
+    console.log(err);
+  }
   d3.select("#time").property("max", graph.maxTime);
   
 

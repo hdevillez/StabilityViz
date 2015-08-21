@@ -1,5 +1,5 @@
 var width = parseInt(d3.select(".slider").style("width"))-1,
-    height = 500;
+    height = 800;
 
 var svgColor = d3.select("#headerVisGraph1").append("svg")
     .attr("width", width)

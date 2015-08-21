@@ -51,7 +51,7 @@ document.getElementById("headerVisSide1")
     .attr("width", width)
     .attr("height", 60);*/
     
-var svg2 = d3.select("#bodyVisSide1").append("svg")
+var svg2 = d3.select("#bodyVisGraph2").append("svg")
     .attr("width", width)
     .attr("height", height);
 

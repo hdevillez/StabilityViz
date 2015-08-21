@@ -34,12 +34,12 @@ rect.selection {
 }
 
 .slideBox {
-  width : 49%; height : 650px;
+  width : 49%; height : 980px;
   border:2px solid black;
   border-radius: 25px;
 }
 .slider {
-  width: 100%; height: 580px;
+  width: 100%; height: 880px;
   overflow: hidden;
 }
 
@@ -57,17 +57,17 @@ rect.selection {
 
 .slider > ul > li {
   float: left;
-  width: 50%; height: 580px;
+  width: 50%; height: 880px;
 }
 
 .headerSlider {
-  height : 11%;
+  height : 8%;
 
 }
 
 .bodySlider {
   border-top : 2px solid black;
   border-bottom : 2px solid black;
-  height : 500;
+  height : 800;
 }
 
