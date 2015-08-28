@@ -33,15 +33,28 @@ rect.selection {
   float:up;
 }
 
-.slideBox {
-  width : 49%; height : 1000px;
+.contentBox {
+  width : 720px; height : 980px;
   border:2px solid black;
   border-radius: 25px;
 }
+
 .slider {
-  width: 100%; height: 880px;
+  width: 720px; 
   overflow: hidden;
+  position : relative;
+
 }
+
+.slider.left {
+  height: 804px;
+}
+
+.slider.right {
+  height: 884px;
+
+}
+
 
 .slider > ul {
   /* styled by JS to match the added width and height of all <li>’s */
@@ -50,24 +63,45 @@ rect.selection {
   -moz-transition: 0.5s left;
   -ms-transition: 0.5s left;
   -o-transition: 0.5s left;
-     
+  width : inherit;
   list-style: none;
   margin: 0; padding: 0;
 }
 
 .slider > ul > li {
   float: left;
-  width: 50%; height: 880px;
+  width: 720px;
 }
 
-.headerSlider {
-  height : 8%;
+.slider.left > ul > li {
+  height: 800px;  
+}
 
+.slider.right > ul > li {
+  height: 884px;  
+}
+
+.headerSlider, .headerBox {
+  height : 8%;
+  display: flex; 
+  justify-content: center;
+  align-items: center; 
+  font-size : 200%; 
+  margin-bottom : 0; 
+  margin-top: 0; 
 }
 
 .bodySlider {
   border-top : 2px solid black;
   border-bottom : 2px solid black;
-  height : 800;
+  height : 91%;
+
 }
+
+.graphBox {
+  border-top : 2px solid black;
+  border-bottom : 2px solid black;
+  height : 800px;
+}
+
 

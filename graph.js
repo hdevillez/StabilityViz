@@ -1,3 +1,5 @@
+// Create a new graph
+
 function initGraph(svg) {
   
   var graph = {
@@ -5,8 +7,6 @@ function initGraph(svg) {
     links : [],
     vis : svg
   };
-  
-  
 
   graph.addNode = function (id) {
       graph.nodes.push({"id":id});
@@ -58,13 +58,17 @@ function initGraph(svg) {
   graph.addLink = function (source, target, value) {
   
       var linkIsNew = true;
+      // Test the link to know if there is already a link in the graph between the source and the target.  If there is already one, don't add the link but sum their value.
       for(var i = 0; i < graph.links.length; i++) {
-        for(var j = 0; j < graph.links.length; j++) {
-          if((graph.links[i].target.id == target && graph.links[i].source.id == source) || 
-             (graph.links[i].target.id == source && graph.links[i].source.id == target))
-            
-            linkIsNew = false;
-        }
+
+        if((graph.links[i].target.id == target && graph.links[i].source.id == source) || 
+            (graph.links[i].target.id == source && graph.links[i].source.id == target)) {
+             
+                graph.links[i].value += value;
+                linkIsNew = false;
+                
+             }
+
       }
       if(linkIsNew)
         graph.links.push({"source":graph.findNode(source),"target":graph.findNode(target),"value":value});
@@ -84,6 +88,7 @@ function initGraph(svg) {
       }
   };
   
+  // Load a graph from a js object (see data/example1.json for the pattern)
   graph.loadGraph = function(data) {
 
     for(var i = 0; i < data.nodes.length; i++) {
@@ -97,6 +102,7 @@ function initGraph(svg) {
      initMatrices(graph);
   }
   
+  // Copy a graph from another one
   graph.copyGraph = function(graphToCopy) {
     for(var i = 0; i < graphToCopy.nodes.length; i++) {
       graph.addNode(graphToCopy.nodes[i].id, graphToCopy.nodes[i].nbWalker, graphToCopy.nodes[i].color);
@@ -121,18 +127,16 @@ function initMatrices(graph) {
   graph.adjMat = function() {
 
     var A = math.zeros(graph.nodes.length);
-
-
-    //reset the matrix
-    
-    //for(var i =0; i < graph.nodes.length; i++) { A.set(i, i, 0)};
-
     for(var i = 0; i < graph.links.length; i++) {
       
       var l = graph.links[i];
-
-      A.subset(math.index(l.source.id, l.target.id), l.value);
-      A.subset(math.index(l.target.id, l.source.id), l.value);
+      if(l.source.id != l.target.id) {
+        A.subset(math.index(l.source.id, l.target.id), l.value);
+        A.subset(math.index(l.target.id, l.source.id), l.value);
+      }
+      else  {    
+        A.subset(math.index(l.target.id, l.source.id), 2*l.value);
+      }
 
     }
     
@@ -142,7 +146,7 @@ function initMatrices(graph) {
   graph.A = graph.adjMat();
     
     
-  //Compute the degree matrix
+  //Compute the matrix of the inverse of the degrees
   graph.degreeInvMat = function() {
     var Dinv = math.zeros(graph.nodes.length);
       
@@ -150,7 +154,12 @@ function initMatrices(graph) {
       var deg = 0;
       for(var j = 0; j<  graph.links.length; j++) {
         if(graph.links[j].target.id == graph.nodes[i].id || graph.links[j].source.id == graph.nodes[i].id) {
-          deg+= graph.links[j].value;
+          if(graph.links[j].target.id != graph.links[j].source.id) {
+            deg+= graph.links[j].value;
+          }
+          else {
+            deg+= graph.links[j].value*2;
+          }
         }
       }
       Dinv.subset(math.index(i,i), 1/deg);     
@@ -158,6 +167,7 @@ function initMatrices(graph) {
       
     return Dinv;
   }
+  
   
   graph.Dinv = graph.degreeInvMat();
       
@@ -171,19 +181,24 @@ function initMatrices(graph) {
   }
     
   graph.P = graph.transitionMat();
-
   var numericP = numeric.identity(graph.nodes.length);
-  for(var i = 0; i < graph.nodes.length; i++) {
-    for(var j = 0; j < graph.nodes.length; j++) {
-      numericP[i][j] = graph.P.subset(math.index(i, j));
-      
+  if(graph.P._size != undefined) {
+   
+    //console.log(graph.P);
+    for(var i = 0; i < graph.nodes.length; i++) {
+      for(var j = 0; j < graph.nodes.length; j++) {
+        numericP[i][j] = graph.P.subset(math.index(i, j));
+        
+      }
     }
   }
-
+  else {
+    numericP[0][0] = graph.P;
+  }
   
-  //Compute the maximal time of the Markovian diffusion process
+  //Compute the maximal time of the Markovian diffusion process.  If it fails (if the graph is too big for example), the maximal time is n^2
   
-  try {
+ /* try {
     var lambdas = numeric.eig(numericP).lambda.x;
     var secondMaxLambda = 0;
     var epsilon = math.pow(10, -10);
@@ -191,15 +206,15 @@ function initMatrices(graph) {
     for(var i = 0; i < graph.nodes.length; i++) {
     
       if(Math.abs(lambdas[i]) < 1-epsilon)
-        secondMaxLambda = Math.max(secondMaxLambda, math.abs(lambda[i])); 
+        secondMaxLambda = Math.max(secondMaxLambda, math.abs(lambdas[i])); 
     }
     
     graph.maxTime = 5/(1-secondMaxLambda);
-  } catch(err) { //The numeric.eig sometimes crashs
+  } catch(err) { //The numeric.eig sometimes crashs*/
     graph.maxTime = Math.pow(graph.nodes.length,2);
     console.log("Error in the computation of the spectral gap :");
-    console.log(err);
-  }
+    //console.log(err);
+  //}
   d3.select("#time").property("max", graph.maxTime);
   
 
@@ -214,7 +229,7 @@ function initMatrices(graph) {
 
 }    
 
-
+// Print the graph on the associated svg
 function refreshGraph(graph) {
  
   link = graph.vis.selectAll(".link").data(graph.links, function(d) {
@@ -227,11 +242,6 @@ function refreshGraph(graph) {
 
  
 
-    
-  /*nodeEnter = node.enter().append("g")
-    .attr("class", "node")
-    .call(force.drag);*/
-     
   link.enter()
     .append("line")
       .attr("class", "link")
@@ -243,7 +253,7 @@ function refreshGraph(graph) {
   node.enter()
     .append("svg:circle")
       .attr("class", "node")
-      .attr("r", 15)
+      .attr("r", function () {return 100/graph.nodes.length + 5;})
       .attr("title", function(d) { return d.nbWalkers[0] +"/"+d.nbWalkers[1] +"/"+d.nbWalkers[2] })
       .style("fill", "#ffffff")
       .style("stroke", "#000000")
@@ -269,8 +279,8 @@ function refreshGraph(graph) {
     
   //The node clicked gets the 100 colored walkers at time = 0
   function mouseClick(element){
-    if(!d3.select("#startButton").classed("active")){
-      
+    if(!d3.select("#playButton").classed("active")){
+
       initColorNode(element);
 
     }              

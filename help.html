@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+<link rel="stylesheet" type"text/css" href="main.css">
+</head>
+
+
+<body style ="background: #B0C4DE">
+<div class="menu"></div>
+<div class = "contentBox" style = "float:left">
+  <div class ="headerBox" id = "headerGraph">
+        <img onclick = "sliders[0].goTo(0)" src = "bouleBleue.png"></img>
+        <img onclick = "sliders[0].goTo(1)" src = "BouleRouge.png"></img>
+  </div>
+  <div class="slider left" style = "height: 804px">
+    <ul id ="graphSlide">
+      <li>
+        <div class ="graphBox" id = "graphSlider1"></div>
+      </li>
+      <li>
+        <div class ="graphBox" id = "graphSlider2"></div>
+      </li>
+   </ul>
+  </div>
+  <div class ="tailBox" id = "tailGraph" style = "visibility : hidden";>
+    
+    <label for="time" 
+           style="display: inline-block; width: 120px; text-align: center;">
+           Time = <span id="time-value">0</span>
+    </label>
+    <input type="range" min="0" max="150" id="time"  autocomplete="off">
+
+    <button onclick ="play()" value = "off" id = "playButton">Play</button>
+    <button onclick = "stop()" value = "off" id = "stopButton">Stop</button>
+
+    <p style = "text-align : center;">Speed :
+      <button onclick="setSpeedWalk(1)" id = "setSpeedWalkButton1" autocomplete="off" class = "active" >1</button>
+      <button onclick="setSpeedWalk(2)" id = "setSpeedWalkButton2" autocomplete="off">2</button>
+      <button onclick="setSpeedWalk(3)" id = "setSpeedWalkButton3" autocomplete="off">3</button>
+    </p>
+  
+  </div>
+
+
+</div>
+
+<div class = "contentBox" style = "float:right">
+  
+  <div class ="slider right" style = "height: 884px">
+    <ul id ="sideSlide">
+      <li>
+        <div class ="headerSlider" id = "headerSide1" > What is a community ?</div>
+        <div class ="bodySlider" id = "bodySide1" style = "overflow-y : auto;"> <p align="justify" style = "margin-left : 10px; margin-right : 10px"> Sed cautela nimia in peiores haeserat plagas, ut narrabimus postea, aemulis consarcinantibus insidias graves apud Constantium, cetera medium principem sed siquid auribus eius huius modi quivis infudisset ignotus, acerbum et inplacabilem et in hoc causarum titulo dissimilem sui.
+
+Et quoniam apud eos ut in capite mundi morborum acerbitates celsius dominantur, ad quos vel sedandos omnis professio medendi torpescit, excogitatum est adminiculum sospitale nequi amicum perferentem similia videat, additumque est cautionibus paucis remedium aliud satis validum, ut famulos percontatum missos quem ad modum valeant noti hac aegritudine colligati, non ante recipiant domum quam lavacro purgaverint corpus. ita etiam alienis oculis visa metuitur labes.
+
+Quam quidem partem accusationis admiratus sum et moleste tuli potissimum esse Atratino datam. Neque enim decebat neque aetas illa postulabat neque, id quod animadvertere poteratis, pudor patiebatur optimi adulescentis in tali illum oratione versari. Vellem aliquis ex vobis robustioribus hunc male dicendi locum suscepisset; aliquanto liberius et fortius et magis more nostro refutaremus istam male dicendi licentiam. Tecum, Atratine, agam lenius, quod et pudor tuus moderatur orationi meae et meum erga te parentemque tuum beneficium tueri debeo.
+
+Quare hoc quidem praeceptum, cuiuscumque est, ad tollendam amicitiam valet; illud potius praecipiendum fuit, ut eam diligentiam adhiberemus in amicitiis comparandis, ut ne quando amare inciperemus eum, quem aliquando odisse possemus. Quin etiam si minus felices in diligendo fuissemus, ferendum id Scipio potius quam inimicitiarum tempus cogitandum putabat.
+
+His cognitis Gallus ut serpens adpetitus telo vel saxo iamque spes extremas opperiens et succurrens saluti suae quavis ratione colligi omnes iussit armatos et cum starent attoniti, districta dentium acie stridens adeste inquit viri fortes mihi periclitanti vobiscum.Sed cautela nimia in peiores haeserat plagas, ut narrabimus postea, aemulis consarcinantibus insidias graves apud Constantium, cetera medium principem sed siquid auribus eius huius modi quivis infudisset ignotus, acerbum et inplacabilem et in hoc causarum titulo dissimilem sui.
+
+Et quoniam apud eos ut in capite mundi morborum acerbitates celsius dominantur, ad quos vel sedandos omnis professio medendi torpescit, excogitatum est adminiculum sospitale nequi amicum perferentem similia videat, additumque est cautionibus paucis remedium aliud satis validum, ut famulos percontatum missos quem ad modum valeant noti hac aegritudine colligati, non ante recipiant domum quam lavacro purgaverint corpus. ita etiam alienis oculis visa metuitur labes.
+
+Quam quidem partem accusationis admiratus sum et moleste tuli potissimum esse Atratino datam. Neque enim decebat neque aetas illa postulabat neque, id quod animadvertere poteratis, pudor patiebatur optimi adulescentis in tali illum oratione versari. Vellem aliquis ex vobis robustioribus hunc male dicendi locum suscepisset; aliquanto liberius et fortius et magis more nostro refutaremus istam male dicendi licentiam. Tecum, Atratine, agam lenius, quod et pudor tuus moderatur orationi meae et meum erga te parentemque tuum beneficium tueri debeo.
+
+Quare hoc quidem praeceptum, cuiuscumque est, ad tollendam amicitiam valet; illud potius praecipiendum fuit, ut eam diligentiam adhiberemus in amicitiis comparandis, ut ne quando amare inciperemus eum, quem aliquando odisse possemus. Quin etiam si minus felices in diligendo fuissemus, ferendum id Scipio potius quam inimicitiarum tempus cogitandum putabat.
+
+His cognitis Gallus ut serpens adpetitus telo vel saxo iamque spes extremas opperiens et succurrens saluti suae quavis ratione colligi omnes iussit armatos et cum starent attoniti, districta dentium acie stridens adeste inquit viri fortes mihi periclitanti vobiscum.Sed cautela nimia in peiores haeserat plagas, ut narrabimus postea, aemulis consarcinantibus insidias graves apud Constantium, cetera medium principem sed siquid auribus eius huius modi quivis infudisset ignotus, acerbum et inplacabilem et in hoc causarum titulo dissimilem sui.
+
+Et quoniam apud eos ut in capite mundi morborum acerbitates celsius dominantur, ad quos vel sedandos omnis professio medendi torpescit, excogitatum est adminiculum sospitale nequi amicum perferentem similia videat, additumque est cautionibus paucis remedium aliud satis validum, ut famulos percontatum missos quem ad modum valeant noti hac aegritudine colligati, non ante recipiant domum quam lavacro purgaverint corpus. ita etiam alienis oculis visa metuitur labes.
+
+Quam quidem partem accusationis admiratus sum et moleste tuli potissimum esse Atratino datam. Neque enim decebat neque aetas illa postulabat neque, id quod animadvertere poteratis, pudor patiebatur optimi adulescentis in tali illum oratione versari. Vellem aliquis ex vobis robustioribus hunc male dicendi locum suscepisset; aliquanto liberius et fortius et magis more nostro refutaremus istam male dicendi licentiam. Tecum, Atratine, agam lenius, quod et pudor tuus moderatur orationi meae et meum erga te parentemque tuum beneficium tueri debeo.
+
+Quare hoc quidem praeceptum, cuiuscumque est, ad tollendam amicitiam valet; illud potius praecipiendum fuit, ut eam diligentiam adhiberemus in amicitiis comparandis, ut ne quando amare inciperemus eum, quem aliquando odisse possemus. Quin etiam si minus felices in diligendo fuissemus, ferendum id Scipio potius quam inimicitiarum tempus cogitandum putabat.
+
+His cognitis Gallus ut serpens adpetitus telo vel saxo iamque spes extremas opperiens et succurrens saluti suae quavis ratione colligi omnes iussit armatos et cum starent attoniti, districta dentium acie stridens adeste inquit viri fortes mihi periclitanti vobiscum.Sed cautela nimia in peiores haeserat plagas, ut narrabimus postea, aemulis consarcinantibus insidias graves apud Constantium, cetera medium principem sed siquid auribus eius huius modi quivis infudisset ignotus, acerbum et inplacabilem et in hoc causarum titulo dissimilem sui.
+
+Et quoniam apud eos ut in capite mundi morborum acerbitates celsius dominantur, ad quos vel sedandos omnis professio medendi torpescit, excogitatum est adminiculum sospitale nequi amicum perferentem similia videat, additumque est cautionibus paucis remedium aliud satis validum, ut famulos percontatum missos quem ad modum valeant noti hac aegritudine colligati, non ante recipiant domum quam lavacro purgaverint corpus. ita etiam alienis oculis visa metuitur labes.
+
+Quam quidem partem accusationis admiratus sum et moleste tuli potissimum esse Atratino datam. Neque enim decebat neque aetas illa postulabat neque, id quod animadvertere poteratis, pudor patiebatur optimi adulescentis in tali illum oratione versari. Vellem aliquis ex vobis robustioribus hunc male dicendi locum suscepisset; aliquanto liberius et fortius et magis more nostro refutaremus istam male dicendi licentiam. Tecum, Atratine, agam lenius, quod et pudor tuus moderatur orationi meae et meum erga te parentemque tuum beneficium tueri debeo.
+
+Quare hoc quidem praeceptum, cuiuscumque est, ad tollendam amicitiam valet; illud potius praecipiendum fuit, ut eam diligentiam adhiberemus in amicitiis comparandis, ut ne quando amare inciperemus eum, quem aliquando odisse possemus. Quin etiam si minus felices in diligendo fuissemus, ferendum id Scipio potius quam inimicitiarum tempus cogitandum putabat.
+
+His cognitis Gallus ut serpens adpetitus telo vel saxo iamque spes extremas opperiens et succurrens saluti suae quavis ratione colligi omnes iussit armatos et cum starent attoniti, districta dentium acie stridens adeste inquit viri fortes mihi periclitanti vobiscum.Sed cautela nimia in peiores haeserat plagas, ut narrabimus postea, aemulis consarcinantibus insidias graves apud Constantium, cetera medium principem sed siquid auribus eius huius modi quivis infudisset ignotus, acerbum et inplacabilem et in hoc causarum titulo dissimilem sui.
+
+Et quoniam apud eos ut in capite mundi morborum acerbitates celsius dominantur, ad quos vel sedandos omnis professio medendi torpescit, excogitatum est adminiculum sospitale nequi amicum perferentem similia videat, additumque est cautionibus paucis remedium aliud satis validum, ut famulos percontatum missos quem ad modum valeant noti hac aegritudine colligati, non ante recipiant domum quam lavacro purgaverint corpus. ita etiam alienis oculis visa metuitur labes.
+
+Quam quidem partem accusationis admiratus sum et moleste tuli potissimum esse Atratino datam. Neque enim decebat neque aetas illa postulabat neque, id quod animadvertere poteratis, pudor patiebatur optimi adulescentis in tali illum oratione versari. Vellem aliquis ex vobis robustioribus hunc male dicendi locum suscepisset; aliquanto liberius et fortius et magis more nostro refutaremus istam male dicendi licentiam. Tecum, Atratine, agam lenius, quod et pudor tuus moderatur orationi meae et meum erga te parentemque tuum beneficium tueri debeo.
+
+Quare hoc quidem praeceptum, cuiuscumque est, ad tollendam amicitiam valet; illud potius praecipiendum fuit, ut eam diligentiam adhiberemus in amicitiis comparandis, ut ne quando amare inciperemus eum, quem aliquando odisse possemus. Quin etiam si minus felices in diligendo fuissemus, ferendum id Scipio potius quam inimicitiarum tempus cogitandum putabat.
+
+His cognitis Gallus ut serpens adpetitus telo vel saxo iamque spes extremas opperiens et succurrens saluti suae quavis ratione colligi omnes iussit armatos et cum starent attoniti, districta dentium acie stridens adeste inquit viri fortes mihi periclitanti vobiscum.
+        </p>
+        </div>
+      </li>
+      <li>
+        <div class ="headerSlider" id = "headerSide2" > Method : random walk</div>
+        <div class ="bodySlider" id = "bodySide2" style = "overflow-y : auto;"></div>
+      </li>
+      <li>
+        <div class ="headerSlider" id = "headerSide3 " > Bad choice of partition</div>
+        <div class ="bodySlider" id = "bodySide3" style = "overflow-y : auto;"></div>
+      </li>
+      <li>
+        <div class ="headerSlider" id = "headerSide4"> Good choice of partition</div>
+        <div class ="bodySlider" id = "bodySide4" style = "overflow-y : auto;"></div>
+      </li>
+    </ul>
+  </div> 
+  <div class = "tailBox" id = "tailGraph">
+    <button onclick="changeSlide(Math.max(0, currPosSlide-1))" style="float:left">Prev</button>
+    <button onclick="changeSlide(Math.min(3, currPosSlide+1))" style="float:right">Next</button>
+  </div>
+</div>
+
+
+<script src="lib/d3.min.js"></script>
+<script src ="lib/math.js"></script>
+<script src ="lib/numeric.min.js"></script>
+<script src ="lib/ryb-color-mixer.js"></script>
+
+
+<script src ="loadJSON.js"></script>
+<script src ="graph.js"></script>
+<script src ="barChart.js"></script>
+<script src ="slider.js"></script>
+<script src ="slideshow.js"></script>
+<script src ="findCommunities.js"></script>
+<script src = "util.js"></script>
+
+
+
+<script>
+
+var width = 720,
+    height = 800;
+
+var node = null, link = null, graph = null;
+
+// Create the svg's for the graph and the bar chart
+var svgGraph = d3.select("#graphSlider1").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+    
+var svgBarChart = d3.select("#graphSlider2").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+       
+    
+var nbColor = 3;
+var nbWalkerTot = 0;
+var automaticWalkInterval = null;  
+var speedWalk = 1;
+var time = 0;
+
+var force = d3.layout.force()
+    .charge(-1000)
+    .linkDistance(75)
+    .size([width, height]);
+
+// Load the 3-communities example
+loadInternFile("data/example5.json");
+
+
+// Wait 0.5s to be sure that the loading of the graph is finished
+window.setTimeout(function (d) { 
+  changeSlide(0);
+  showEmptyBarChart(); 
+}, 500);
+
+
+// If the slider is moved, change the time and walk.
+d3.select("#time").on("input", function () {
+  walk(+d3.select("#time").property("value"));
+});
+
+</script>

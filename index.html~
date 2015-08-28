@@ -4,100 +4,54 @@
 <link rel="stylesheet" type"text/css" href="main.css">
 </head>
 
-
 <body style ="background: #B0C4DE">
 <div class="menu">
-  <select name="graphsChoice" id="graphChoice" onchange="loadInternFile()" selectedIndex = "1">
-  <option value="data/example1.json">example1</option>
-  <option value="data/example2.json">example2</option>
-  <option value="data/example3.json">example3</option>
-  <option value="data/example4.json">example4</option>
-  <option value="data/example5.json">example5</option>
+  <select name="graphChoice" id="graphChoice" selectedIndex = "1">
+    <option value="data/example1.json">example1</option>
+    <option value="data/example2.json">example2</option>
+    <option value="data/example3.json">example3</option>
+    <option value="data/example4.json">example4</option>
+    <option value="data/example5.json">example5</option>
   </select>
   <button onclick="partition()" value = "off" id = "partitionButton">Partition</button>
-  <button onclick="start()" value = "off" id = "startButton">Start</button>
-  <button onclick="reinitialization()">Reinitialization</button>
-  <button onclick="sliders[0].goTo(0)">Graph</button>
-  <button onclick="sliders[0].goTo(1)">Bar chart</button>
+  <button onclick="findCommunities(1)">Find communities</button>
   <input type="file" id="fileInput" onchange = "loadExternFile()">
-
-</div>
-<div class = "slideBox" style = "float:left">
-  <div class="slider">
-    <ul id ="graphSlide">
-      <li>
-        <div class ="headerSlider" id = "headerVisGraph1"></div>
-        <div class ="bodySlider" id = "bodyVisGraph1"></div>
-        <div class ="tailSlider" i d = "tailVisGraph1"></div>
-      </li>
-      <li>
-        <div class ="headerSlider" id = "headerVisGraph2"></div>
-        <div class ="bodySlider" id = "bodyVisGraph2"></div>
-      </li>
-      <li>
-        <div class ="headerSlider" id = "headerVisGraph3"></div>
-        <div class "bodySlider" id = "bodyVisGraph3"></div>
-      </li>
-      <li>
-        <div class ="headerSlider" id = "headerVisGraph4"></div>
-        <div class ="bodySlider" id = "bodyVisGraph4"></div>
-      </li>
-   </ul>
-  </div>
   
-  
-  <button onclick="sliders[0].goToPrev()" style="float:left">Prev</button>
-
-
-  <label for="time" 
-         style="display: inline-block; width: 120px; text-align: center;">
-         Time = <span id="time-value">0</span>
-  </label>
-  <input type="range" min="0" max="150" id="time" disabled="true" autocomplete="off">
-
-  <button onclick="sliders[0].goToNext()" style="float:right">Next</button>
-  <button onclick="walk(time+getSpeedWalk())" id = "walkButton" disabled="true" autocomplete="off">Walk</button>
-<button onclick="automaticWalk()" id = "automaticWalkButton" disabled="true" autocomplete="off">Automatic Walk</button>
-<p style = "text-align : center">Speed :
-  <button onclick="setSpeedWalk(1)" id = "setSpeedWalkButton1" disabled="true" autocomplete="off">1</button>
-  <button onclick="setSpeedWalk(2)" id = "setSpeedWalkButton2" disabled="true" autocomplete="off">2</button>
-  <button onclick="setSpeedWalk(3)" id = "setSpeedWalkButton3" disabled="true" autocomplete="off">3</button>
-</p>
-
-
-
+  <form action="help.html">
+    <input type="submit" value="Help">
+  </form>
 </div>
 
-<div class = "slideBox" style = "float:right">
+<div class = "contentBox" style = "float:left">
+  <div class ="headerBox" id = "headerGraph"></div> 
+  <div class ="graphBox" id = "graphBox"></div>
+  <div class ="tailBox" id = "tailGraph">
+    
+    <label for="time" 
+           style="display: inline-block; width: 120px; text-align: center;">
+           Time = <span id="time-value">0</span>
+    </label>
+    <input type="range" min="0" max="150" id="time" autocomplete="off">
+
+    <button onclick ="play()" value = "off" id = "playButton">Play</button>
+    <button onclick = "stop()" value = "off" id = "stopButton">Stop</button>
+
+    <p style = "text-align : center;">Speed :
+      <button onclick="setSpeedWalk(1)" id = "setSpeedWalkButton1" autocomplete="off" class = "active" >1</button>
+      <button onclick="setSpeedWalk(2)" id = "setSpeedWalkButton2" autocomplete="off">2</button>
+      <button onclick="setSpeedWalk(3)" id = "setSpeedWalkButton3" autocomplete="off">3</button>
+    </p>
   
-  <div class ="slider">
-    <ul id ="sideSlide">
-      <li>
-        <div class ="headerSlider" id = "headerVisSide1"></div>
-        <div class ="bodySlider" id = "bodyVisSide1"></div>
-      </li>
-      <li>
-        <div class ="headerSlider" id = "headerVisSide2"></div>
-        <div class ="bodySlider" id = "bodyVisSide2"></div>
-      </li>
-      <li>
-        <div class ="headerSlider" id = "headerVisSide3"></div>
-        <div class "bodySlider" id = "bodyVisSide3"></div>
-      </li>
-      <li>
-        <div class ="headerSlider" id = "headerVisSide4"></div>
-        <div class ="bodySlider" id = "bodyVisSide4"></div>
-      </li>
-    </ul>
   </div>
 
-    <button onclick="sliders[1].goToPrev()" style="float:left">Prev</button>
-    <button onclick="sliders[1].goToNext()" style="float:right">Next</button>
+
 </div>
 
-
-
-
+<div class = "contentBox" style = "float:right"> 
+  <div class = "headerBox" id = "headerBarChart"></div> 
+  <div class = "graphBox" id = "barChartBox"></div>
+  <div class = "tailBox" id = "tailBarChart"></div>
+</div>
 
 <script src="lib/d3.min.js"></script>
 <script src ="lib/math.js"></script>
@@ -106,268 +60,87 @@
 
 
 <script src ="loadJSON.js"></script>
-<script src ="readUserGraph.js"></script>
 <script src ="graph.js"></script>
 <script src ="partition.js"></script>
 <script src ="barChart.js"></script>
-<script src ="slider.js"></script>
-<script src ="slideshow.js"></script>
-
-
+<script src ="findCommunities.js"></script>
+<script src ="util.js"></script>
 
 <script>
 
+var width = 720,
+    height = 800;
+    
+var node = null, link = null, graph = null;
+
+// Create the svg's for the graph and the bar chart
+var svgGraph = d3.select("#graphBox").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+    
+var svgBarChart = d3.select("#barChartBox").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+       
+    
 var nbColor = 3;
 var nbWalkerTot = 0;
-var groupNode = []; //Array containing the nodes selected
-var color = d3.scale.category20(); //Array of random color
-
-
-var circles = null, lines = null, graph = null;
+var automaticWalkInterval = null;  
+var speedWalk = 1;
+var time = 0;
 
 var force = d3.layout.force()
     .charge(-1000)
     .linkDistance(75)
     .size([width, height]);
+    
+// Load the 3-communities example
+loadInternFile("data/example5.json");
 
-var time = 0;
-
-loadInternFile();
-
-function getMaxOfArray(numArray) {
-  return Math.max.apply(null, numArray);
-}
-
-function sumArray(numArray) {
-  var sum = 0;
-  for(var i = 0; i <numArray.length; i++)
-    sum += numArray[i];
-  return sum;
-}
-
-function sumLineArray2D(tab2D, line){
-        var sum = 0;
-        for(var i = 0; i < nbColor; i++){
-                sum += tab2D[i][line];
-        }
-        return sum;
-}
-
+// If the slider is moved, change the time and walk if there are walkers.
 d3.select("#time").on("input", function () {
-  walk(+d3.select("#time").property("value"));
+  if(nbWalkerTot != 0)
+    walk(+d3.select("#time").property("value"));
+  else {
+    d3.select("#time-value").text(d3.select("#time").property("value"));
+    time = +d3.select("#time").property("value");
+  }
 });
 
-function walk(newTime) {
-  
-  time = newTime;
-  
-  d3.select("#time-value").text(time);
-  d3.select("#time").property("value", time);
+// Load another graph if the user chose another example in the list
+d3.select("#graphChoice").on("change", function () {
+  loadInternFile(d3.select("#graphChoice").property("value"));
+});
 
 
-  var Xn = [];
-  for( var i = 0; i < nbColor; i++) {
-    Xn[i] = math.multiply(graph.X0[i], math.pow(graph.P, time));
-  }
-  
-  for(var i = 0; i < nbColor; i++) {
-    for(var j = 0; j < graph.nodes.length; j++) {
-      graph.nodes[j].nbWalkers[i] = Xn[i].subset(math.index(j));
-    }
+// Create the rectangles of color to chose how the nodes are colored
+var svgColor = d3.select("#headerVisGraph").append("svg")
+    .attr("width", width)
+    .attr("height", 60);
+    var colorTab = ["#ff0000", "#00ff00", "#0000ff","#ffff00", "#00ffff", "#ff00ff", "#ffffff", "#000000"];
+var currColor = "#ff0000";
+var interval = (width - 50*colorTab.length)/(colorTab.length+1);
 
-  }
-  
-  update();
-  
-}
-
-var automaticWalkInterval = null;  
-function automaticWalk() {
-  
-  if(d3.select("#automaticWalkButton").classed("active")) {
-    d3.select("#automaticWalkButton").classed("active", false);
-    clearInterval(automaticWalkInterval);
-  }
-  else {
-    d3.select("#automaticWalkButton").classed("active", true);
-    automaticWalkInterval = setInterval(function () {walk(time+getSpeedWalk());}, 500);
-  }
-}
-
-
-var speedWalk = 1;
-function setSpeedWalk(sw) {
-  d3.select("#setSpeedWalkButton" +speedWalk).classed("active", false);
-  speedWalk = sw;
-  d3.select("#setSpeedWalkButton" +speedWalk).classed("active", true);
-}
-
-function getSpeedWalk() {
-  switch(speedWalk) { 
-    case 1:
-      return +1;
-      break;
-    case 2:
-      return +Math.round(graph.maxTime/50);
-      break;
-    case 3:
-      return +Math.round(graph.maxTime/20);
-      break;
-    default:
-      return 1;
-  }
-}
-
-function update() {
-
-  if(node != null) {
-
-    node
-      .transition()
-      .attr("r", function(d) {return (sumArray(d.nbWalkers)/nbWalkerTot)* 100 +5})
-     // .attr("opacity", function(d) {return (sumArray(d.nbWalkers)/nbWalkerTot)*0.9+0.1 })
-      .style("fill", changeColorNode) 
-      .attr("title", function(d) { return d.nbWalkers[0] +"/"+d.nbWalkers[1] +"/"+d.nbWalkers[2] });
-  }
-  
-  fillBarChart();
-
-}
-
-function reinitialization() {
-  
-  if(d3.select("#automaticWalkButton").classed("active"))
-    automaticWalk(); // Stop the automatic walk
-  if(d3.select("#startButton").classed("active"))
-    start(); // Turn off the start button
-  
-  d3.select("#time").property("value", 0);
-  time = 0;
-  d3.select("#time-value").text(time);
-  
-  if(automaticWalkInterval != null) //Remove automatic walk
-    clearInterval(automaticWalkInterval);
-  speedWalk = 1;
-  
-  clearBarChart();   
-
-  nbWalkerTot = 0;
-  if(graph != null) {
-    for(var i = 0; i < nbColor; i++) {
-      for(var j = 0; j < graph.nodes.length; j++) {
-
-          graph.nodes[j].nbWalkers[i] = 0;
-          graph.nodes[j].color = "#000000";
-          graph.X0[i][j] = 0;
-      }
-    }
-    
-    node
-      .transition()
-        .attr("r", 15)
-        .attr("title", function(d) { return d.nbWalkers[0] +"/"+d.nbWalkers[1] +"/"+d.nbWalkers[2] })
-        .style("fill", "#ffffff")
-  }
-
-}
-
-function start() {
  
- var buttonStart = d3.select("#startButton");
- 
- showEmptyBarChart();
- 
- if(buttonStart.classed("active")) {
-    buttonStart.classed("active", false);
-    buttonStart.property("textContent", "Start");
-    
-    d3.select("#walkButton").property("disabled", true);
-    d3.select("#automaticWalkButton").property("disabled", true);
-    d3.select("#showBarChartButton").property("disabled", true);
-    d3.select("#time").property("disabled", true);
-    
-    d3.select("#setSpeedWalkButton1").property("disabled", true);
-    d3.select("#setSpeedWalkButton2").property("disabled", true);
-    d3.select("#setSpeedWalkButton3").property("disabled", true);
-    
-    d3.select("#setSpeedWalkButton1").classed("active", false);
-    d3.select("#setSpeedWalkButton2").classed("active", false);
-    d3.select("#setSpeedWalkButton3").classed("active", false);
-
-    
-    reinitialization();
-
-  }
-  else if(nbWalkerTot >= 100){
-    buttonStart.classed("active", true);
-    buttonStart.property("textContent", "Stop");
-    
-    
-    d3.select("#walkButton").property("disabled", false);
-    d3.select("#automaticWalkButton").property("disabled", false);
-    d3.select("#showBarChartButton").property("disabled", false);
-    d3.select("#time").property("disabled", false);
-    
-    d3.select("#setSpeedWalkButton1").property("disabled", false);
-    d3.select("#setSpeedWalkButton2").property("disabled", false);
-    d3.select("#setSpeedWalkButton3").property("disabled", false);
-    
-    d3.select("#setSpeedWalkButton1").classed("active", true);
-
-  }
-}
-
-
-function changeColorNode(d) {
-    
-        
-  var maxWalker = getMaxOfArray(d.nbWalkers);
-
-  var rybColor = [];
-  for(var i = 0; i < nbColor; i++) {
-    if(maxWalker != 0)
-      rybColor[i] = 255 * (d.nbWalkers[i]/maxWalker) * Math.sqrt(Math.sqrt(Math.sqrt(sumArray(d.nbWalkers)/nbWalkerTot))); //
-    else
-      rybColor[i] = 0;
-  }
-  return "#" +(rybColorMixer.rybToRgb(rybColor, { hex: true}));
-         
-}
-
-function initColorNode(element) {
-
-  for(var i = 0; i < nbColor; i++) {
-    element.nbWalkers[i] = 0;
-    graph.X0[i][element.id] = 0;
-  }
-  
-  if(element.color == "#000000" && currColor != "#000000")
-    nbWalkerTot += 100;
-  if(element.color != "#000000" && currColor == "#000000")
-    nbWalkerTot -= 100;
-    
-  var arrayColor = rybColorMixer.hexToArray(currColor);
-  for(var i = 0; i < nbColor; i++) {
-  
-
-    console.log(arrayColor);
-    if(arrayColor[i] > 0)
-      element.nbWalkers[i] = 100*255/sumArray(arrayColor);
-    else
-      element.nbWalkers[i] = 0;
-   
-    graph.X0[i][element.id] = element.nbWalkers[i];
-    element.color = currColor;
-  }
-  
-  node.transition()
-    .style("fill", changeColorNode)
-    .attr("title", function(d) { return d.nbWalkers[0] +"/"+d.nbWalkers[1] +"/"+d.nbWalkers[2] });
-        
-  console.log(nbWalkerTot);
-  
-}     
-
+svgColor.selectAll(".colorChoice")
+    .data(colorTab)
+  .enter().append("rect")
+  .attr("class", "colorChoice")
+  .attr("width", 50)
+  .attr("height", 50)
+  .attr("fill", function (d, i) { return"#" +(rybColorMixer.rybToRgb(colorTab[i], { hex: true}))})
+  .attr("x", function(d, i) { return i*(50 + interval) + interval})
+  .attr("y", 5)
+  .attr("rx", 15) // rounded corner
+  .attr("ry", 15)
+  .style("stroke", "#000000")
+  .style("stroke-width", function (d, i) { if(i==0) return 3; else return 0;})
+  .on("click", function(d, i) {
+    currColor = colorTab[i];
+    svgColor.selectAll(".colorChoice")
+      .style("stroke-width", "0");
+    d3.select(this).style("stroke-width", "3");
+  });
 
 </script>
 

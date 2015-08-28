@@ -1,5 +1,3 @@
-var graphPartition = null;
-
 //Let the user select nodes to do the partition shown in the right corner of the page
 function partition(){
 
@@ -9,7 +7,7 @@ function partition(){
     document.getElementById("partitionButton").innerHTML="Partition On";
 
     d3.selectAll(".node").on('mousedown.drag', null);
-    svg
+    svgGraph
       .on( "mousedown", function() {
         var m = d3.mouse( this);
         
@@ -18,7 +16,7 @@ function partition(){
         
         
         //the selection is a rectangle with rounded corners but we can try with ellipse, cx, cy, rx, ry
-        svg.append( "rect")
+        svgGraph.append( "rect")
           .attr("rx", 70)
           .attr("ry", 70)
           .attr("class", "selection")
@@ -29,7 +27,7 @@ function partition(){
 
       })
       .on( "mousemove", function() {
-        var s = svg.select( "rect.selection");
+        var s = svgGraph.select( "rect.selection");
    
         if( !s.empty()) {
           var m = d3.mouse( this),
@@ -100,7 +98,7 @@ function partition(){
         //svg.select(".selection") is an array containing the dashed rectangle
         console.log("test");
           initPartition()
-          svg.select( ".selection").remove();
+          svgGraph.select( ".selection").remove();
           return;
       });
       
@@ -108,16 +106,16 @@ function partition(){
     else if(document.getElementById("partitionButton").value === "on"){
       document.getElementById("partitionButton").value = "off";
       document.getElementById("partitionButton").innerHTML="Partition Off";
-      svg.on("mousemove", function(){return;});
-      svg.on("mouseup", function(){return;});
-      svg.on("mousedown", function(){return;});
+      svgGraph.on("mousemove", function(){return;});
+      svgGraph.on("mouseup", function(){return;});
+      svgGraph.on("mousedown", function(){return;});
       
       node.call(force.drag);
   }
 }
 
 function initPartition() {
-  if(!d3.select("#startButton").classed("active")){
+  if(!d3.select("#playButton").classed("active")){
     for(var iNode = 0; iNode < groupNode.length; iNode++) {
       initColorNode((groupNode[iNode]));
     }

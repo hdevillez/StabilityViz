@@ -1,8 +1,9 @@
+// Load the graph with the data provided (see data/examples1.json for the pattern)
 function loadGraph(data){
 
   reinitialization();
   clearBarChart();
-  
+
 
   
   if(graph != null) {
@@ -10,33 +11,35 @@ function loadGraph(data){
     graph.removeAllLinks();
   }
       
-  graph = new initGraph(svg);
+  graph = new initGraph(svgGraph);
   graph.loadGraph(data);
       
   force
     .nodes(graph.nodes)
     .links(graph.links)
     .start();
-  console.log(data);
+  //console.log(data);
   refreshGraph(graph);
 
 
 
 };
 
-function loadInternFile() {
-  file = document.getElementById("graphChoice").value; //Get the name file
+// Load a file in the servor
+function loadInternFile(file) {
 
+  console.log(file);
   d3.json(file, function(error, data) {
       
   if (error) return alert("Error in the loading of the file.");     
     
-    console.log(data);
+    //console.log(data);
     loadGraph(data);
    
   });
 }
 
+// Load a file provided by the user
 function loadExternFile() {
 
   var reader = new FileReader();
@@ -50,7 +53,7 @@ function loadExternFile() {
     else if(inputFile.files[0].name.match('\.net'))
       data = parsePajek(reader.result);
     
-    console.log(data);
+    //console.log(data);
     
     loadGraph(data);
     
@@ -60,9 +63,9 @@ function loadExternFile() {
   reader.readAsText(inputFile.files[0]);
 }
 
-//Parse a pajek NET string
+//Parse a pajek .net string
 function parsePajek(pajek){
-  console.log(pajek);
+  //console.log(pajek);
   
   var data = {
     nodes : [],
@@ -103,14 +106,14 @@ function parsePajek(pajek){
   if(lines[indexOfFirstLink].toLowerCase().indexOf("*edges") != -1 ||lines[indexOfFirstLink].toLowerCase().indexOf("*arcs")!= -1) {
     for(var i = indexOfFirstLink+1; i < lines.length-1; i++) {
       var link = lines[i].split(" ");
-      console.log(link);
+      //console.log(link);
       
       if(link[0] <= 0 || link[0] > nbNodes || link[1] <= 0 || link[1] > nbNodes) {
           alert("Format error");
           return undefined;
       }
       
-      console.log(link.length);
+     // console.log(link.length);
       if(link.length == 2) {
         data.links.push({"source" : +link[0]-1, "target" : +link[1]-1, "value" : 1});
       }
@@ -145,7 +148,7 @@ function parsePajek(pajek){
       }            
   }
 
-  console.log(data);
+ // console.log(data);
   return data;
 }
 

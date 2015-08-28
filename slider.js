@@ -1,4 +1,4 @@
-//http://rafbm.github.io/howtomakeaslider/
+//source : http://rafbm.github.io/howtomakeaslider/
 
 var Slider = function() { this.initialize.apply(this, arguments) }
 Slider.prototype = {
@@ -8,7 +8,7 @@ Slider.prototype = {
     this.li = this.ul.children
  
     // make <ul> as large as all <li>’s
-    this.ul.style.width = (this.li[0].clientWidth * this.li.length) + 'px'
+    this.ul.style.width = (this.li[0].clientWidth * 2*this.li.length) + 'px'
  
     this.currentIndex = 0
   },
